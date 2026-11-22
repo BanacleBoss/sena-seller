@@ -390,3 +390,27 @@ function page_(title, msg, ok) {
   return HtmlService.createHtmlOutput(html).setTitle('세나컴퍼니 공구 신청');
 }
 function esc_(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+
+/* ───────────── 일회성: 상호 변경 (건강하세나 → 세나컴퍼니) ───────────── */
+
+// 아직 보내지 않은(상태 '발굴') 셀러의 DM 초안에서 '건강하세나'를 '세나컴퍼니'로 바꿈.
+// 편집기에서 renameBrandInDrafts 를 한 번 실행. 5분 안에 다 못 하면 다시 실행하면 남은 것만 처리됨.
+function renameBrandInDrafts() {
+  const rows = queryDb_(SELLER_DB, { filter: { and: [
+    { property: '상태', status: { equals: '발굴' } },
+    { property: 'DM 초안', rich_text: { contains: '건강하세나' } }
+  ] }, page_size: 100 }, true);
+  const start = Date.now();
+  let done = 0, fail = 0;
+  for (let k = 0; k < rows.length; k++) {
+    if (Date.now() - start > 300000) break;
+    const r = rows[k];
+    const after = text_(r.properties['DM 초안']).split('건강하세나').join('세나컴퍼니');
+    const chunks = [];
+    for (let i = 0; i < after.length; i += 1900) chunks.push({ text: { content: after.slice(i, i + 1900) } });
+    const res = notion_('patch', '/v1/pages/' + r.id, { properties: { 'DM 초안': { rich_text: chunks } } });
+    if (res.code === 200) done++; else { fail++; console.error(res.text.slice(0, 300)); }
+    Utilities.sleep(350);
+  }
+  console.log('대상 ' + rows.length + '명 중 ' + done + '명 변경, 실패 ' + fail + '명, 남은 ' + (rows.length - done - fail) + '명');
+}
