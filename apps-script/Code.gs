@@ -283,28 +283,34 @@ function parseMall_(pageUrl, html) {
   const uniq = a => a.filter((x, i) => x && a.indexOf(x) === i);
   const og = (html.match(/property="og:image"\s+content="([^"]+)"/) || html.match(/content="([^"]+)"\s+property="og:image"/) || [])[1];
 
-  if (/\/product\/detail\.html/.test(pageUrl)) { // 카페24 (zespamshop)
+  if (html.indexOf('id="prdDetail"') >= 0) { // 카페24 (zespamshop) — 주소가 아니라 내용으로 판단 (자사몰이 카페24로 넘겨주는 경우 대비)
     const gal = uniq((html.match(/\/\/[a-z0-9.]+\/web\/product\/(?:big|extra\/big)\/[^"'\s)]+\.(?:jpg|jpeg|png|gif|webp)/gi) || []).map(abs));
-    let seg = '';
-    let i = html.indexOf('id="prdDetail"'); if (i < 0) i = html.indexOf('prdDetail');
-    if (i > 0) { seg = html.slice(i, i + 200000); const j = seg.search(/id="prd(Info|Review|QnA)"/); seg = j > 0 ? seg.slice(0, j) : seg.slice(0, 80000); }
-    const det = uniq((seg.match(/(?:ec-data-src|src)="([^"]+)"/gi) || [])
-      .map(s => s.replace(/^[^"]*"/, '').replace(/"$/, ''))
-      .filter(s => !/^data:|echosting|skin_img|\{\$|\/product\/(tiny|small|medium|extra\/small)\/|\.svg|\.gif$/i.test(s))
-      .map(abs));
+    let seg = html.slice(html.indexOf('id="prdDetail"'));
+    const j = seg.search(/id="prd(Info|Review|QnA)"/); seg = j > 0 ? seg.slice(0, j) : seg.slice(0, 80000);
+    const det = pickImgs_(seg, abs);
     const img = og ? abs(og) : gal[0];
-    return { img: img, gal: uniq([img].concat(gal)).slice(0, 6), det: det.slice(0, 40) };
+    return { img: img, gal: uniq([img].concat(gal)).slice(0, 6), det: det };
   }
 
-  // 고도몰 (zespa.co.kr, loabell.co.kr)
-  const i = html.indexOf('detail_explain');
+  // 고도몰: 제스파몰은 detail_explain, 로아벨몰은 id="detail" ~ id="delivery" 사이
   let seg = '';
+  let i = html.indexOf('detail_explain');
   if (i > 0) { const j = html.indexOf('<!-- //', i); seg = html.slice(i, j > i ? j : i + 150000); }
-  const det = uniq((seg.match(/(?:data-src|src)="([^"]+)"/gi) || [])
-    .map(s => s.replace(/^[^"]*"/, '').replace(/"$/, ''))
-    .filter(s => !/^data:|\.svg|blank|spacer/i.test(s)).map(abs));
+  else if ((i = html.indexOf('id="detail"')) > 0) { const j = html.indexOf('id="delivery"', i); seg = html.slice(i, j > i ? j : i + 150000); }
+  const det = pickImgs_(seg, abs);
   const img = og ? abs(og) : det[0];
-  return { img: img, gal: img ? [img] : [], det: det.slice(0, 40) };
+  return { img: img, gal: img ? [img] : [], det: det };
+}
+
+function pickImgs_(seg, abs) {
+  const out = [];
+  (seg.match(/(?:ec-data-src|data-src|src)="([^"]+)"/gi) || []).forEach(s => {
+    const u = s.replace(/^[^"]*"/, '').replace(/"$/, '');
+    if (/^data:|echosting|skin_img|\{\$|\/product\/(tiny|small|medium|extra\/small)\/|\.svg|\.gif$|blank|spacer/i.test(u)) return;
+    const a = abs(u);
+    if (out.indexOf(a) < 0) out.push(a);
+  });
+  return out.slice(0, 40);
 }
 
 function allowedItems_() {
