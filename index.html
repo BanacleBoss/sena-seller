@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>세나컴퍼니 · 셀러 공동구매 플랫폼</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f7f3ec; --card:#fffdf9; --ink:#1f2a24; --sub:#5d675f; --line:#e4ddd0;
+  --green:#2f4a3a; --green-2:#466b55; --clay:#c46a4a; --clay-soft:#f6e3da; --sage:#e3ebe2; --sand:#efe6d6;
+  --r:18px;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:"Noto Sans KR",system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3,.serif{font-family:"Noto Serif KR",serif;letter-spacing:-.01em}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+button{font:inherit;cursor:pointer}
+
+/* nav */
+nav{position:sticky;top:0;z-index:20;background:rgba(247,243,236,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
+.logo{font-family:"Noto Serif KR",serif;font-weight:700;font-size:20px;color:var(--green);text-decoration:none}
+.logo small{font-family:"Noto Sans KR";font-weight:500;font-size:11px;color:var(--sub);margin-left:8px;letter-spacing:.08em}
+.navlinks{display:flex;gap:22px;font-size:14px}
+.navlinks a{text-decoration:none;color:var(--sub)}
+.navlinks a:hover{color:var(--ink)}
+@media(max-width:720px){.navlinks{display:none}}
+
+/* hero */
+.hero{padding:72px 0 56px}
+.hero .eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.12em;color:var(--clay);background:var(--clay-soft);padding:6px 12px;border-radius:99px}
+.hero h1{font-size:clamp(32px,5.2vw,54px);line-height:1.25;margin:20px 0 18px;color:var(--green)}
+.hero p{font-size:17px;color:var(--sub);max-width:600px;margin:0 0 30px}
+.cta{display:inline-flex;align-items:center;gap:8px;background:var(--green);color:#fff;border:0;border-radius:99px;padding:15px 26px;font-weight:700;font-size:15px;text-decoration:none}
+.cta:hover{background:var(--green-2)}
+.cta.ghost{background:transparent;color:var(--green);border:1.5px solid var(--green)}
+.hero .btns{display:flex;gap:10px;flex-wrap:wrap}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:48px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.stat b{display:block;font-family:"Noto Serif KR",serif;font-size:26px;color:var(--green)}
+.stat span{font-size:13px;color:var(--sub)}
+@media(max-width:720px){.stats{grid-template-columns:repeat(2,1fr)}}
+
+section{padding:64px 0}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:26px}
+.sec-head h2{font-size:30px;margin:0;color:var(--green)}
+.sec-head p{margin:6px 0 0;color:var(--sub)}
+
+/* filters */
+.filters{display:flex;flex-direction:column;gap:12px;margin-bottom:24px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.row .lab{font-size:12px;font-weight:700;color:var(--sub);width:54px}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:7px 15px;font-size:14px;color:var(--ink)}
+.chip.on{background:var(--green);border-color:var(--green);color:#fff}
+.search{flex:1;min-width:200px;max-width:320px;border:1px solid var(--line);background:var(--card);border-radius:99px;padding:9px 16px;font:inherit;font-size:14px}
+
+/* grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:transform .15s,box-shadow .15s}
+.card:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(31,42,36,.08)}
+.card.sel{border-color:var(--green);box-shadow:0 0 0 2px var(--green)}
+.thumb{aspect-ratio:4/3;display:flex;flex-direction:column;justify-content:space-between;padding:16px;position:relative}
+.thumb.c-device{background:linear-gradient(145deg,#e3ebe2,#cfdccf)}
+.thumb.c-beauty{background:linear-gradient(145deg,#f6e3da,#ecd0c2)}
+.thumb.c-diet{background:linear-gradient(145deg,#efe6d6,#e2d3b8)}
+.thumb .ic{width:44px;height:44px;opacity:.75}
+.thumb.has-img{padding:0;background:#fff}
+.thumb.has-img .fb{display:none}
+.thumb:not(.has-img) img.main{display:none}
+.thumb .fb{display:flex;flex-direction:column;justify-content:space-between;height:100%}
+.thumb img.main{width:100%;height:100%;object-fit:contain;display:block}
+.thumb.has-img .badges{top:12px;right:12px}
+.btns2{display:flex;gap:8px;margin-top:6px}
+.btns2 .pick{flex:1;margin:0}
+.detbtn{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;font-weight:700;font-size:14px;color:var(--ink)}
+.pd{max-width:760px}
+.pd .top{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+@media(max-width:640px){.pd .top{grid-template-columns:1fr}}
+.pd .hero-img{width:100%;aspect-ratio:1;object-fit:contain;background:#fff;border:1px solid var(--line);border-radius:16px}
+.pd .gal{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.pd .gal img{width:56px;height:56px;object-fit:contain;background:#fff;border:1px solid var(--line);border-radius:8px;cursor:pointer}
+.pd .gal img.on{border-color:var(--green);box-shadow:0 0 0 1px var(--green)}
+.pd dl{display:grid;grid-template-columns:88px 1fr;gap:8px 10px;font-size:14px;margin:14px 0}
+.pd dt{color:var(--sub)} .pd dd{margin:0;font-weight:500}
+.pd .links{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.pd .links a{font-size:13px;text-decoration:none;border:1px solid var(--line);background:#fff;border-radius:99px;padding:7px 13px}
+.pd .detail{margin-top:24px;border-top:1px solid var(--line);padding-top:18px}
+.pd .detail img{width:100%;display:block}
+.pd .detail .wrap-imgs{max-height:1400px;overflow:hidden;position:relative}
+.pd .detail .wrap-imgs.open{max-height:none}
+.pd .detail .more{display:block;width:100%;margin-top:10px;border:1px solid var(--line);background:#fff;border-radius:12px;padding:12px;font-weight:700}
+.thumb .big{font-family:"Noto Serif KR",serif;font-size:24px;font-weight:700;color:var(--green);line-height:1.2}
+.badges{position:absolute;top:14px;right:14px;display:flex;gap:6px}
+.badge{font-size:11px;font-weight:700;padding:4px 9px;border-radius:99px;background:#fff;color:var(--green)}
+.badge.best{background:var(--clay);color:#fff}
+.badge.new{background:var(--green);color:#fff}
+.body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:8px;flex:1}
+.brand{font-size:12px;font-weight:700;color:var(--clay);letter-spacing:.04em}
+.name{font-weight:700;font-size:16px;line-height:1.4}
+.desc{font-size:13px;color:var(--sub)}
+.meta{display:flex;justify-content:space-between;font-size:13px;color:var(--sub);border-top:1px dashed var(--line);padding-top:10px;margin-top:auto}
+.meta b{color:var(--ink)}
+.note{font-size:12px;color:var(--clay);background:var(--clay-soft);border-radius:8px;padding:5px 9px}
+.pick{margin-top:6px;border:1.5px solid var(--green);background:transparent;color:var(--green);border-radius:12px;padding:10px;font-weight:700;font-size:14px}
+.card.sel .pick{background:var(--green);color:#fff}
+.empty{grid-column:1/-1;text-align:center;color:var(--sub);padding:40px}
+
+/* conditions */
+.cond{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.cond div{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:24px}
+.cond b{display:block;font-family:"Noto Serif KR",serif;font-size:20px;color:var(--green);margin-bottom:6px}
+.cond span{font-size:14px;color:var(--sub)}
+@media(max-width:820px){.cond{grid-template-columns:1fr}}
+
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;counter-reset:s}
+.step{background:var(--green);color:#fff;border-radius:var(--r);padding:22px 18px;counter-increment:s}
+.step::before{content:"0" counter(s);font-family:"Noto Serif KR",serif;font-size:13px;opacity:.6;display:block;margin-bottom:10px}
+.step b{display:block;font-size:16px;margin-bottom:4px}
+.step span{font-size:13px;opacity:.8}
+@media(max-width:820px){.steps{grid-template-columns:1fr 1fr}}
+
+.channels{display:flex;gap:10px;flex-wrap:wrap}
+.channels span{background:var(--card);border:1px solid var(--line);border-radius:99px;padding:10px 18px;font-weight:500}
+
+/* sticky bar */
+.bar{position:fixed;left:50%;bottom:18px;transform:translate(-50%,140%);transition:transform .25s;z-index:30;background:var(--ink);color:#fff;border-radius:99px;padding:10px 10px 10px 22px;display:flex;align-items:center;gap:16px;box-shadow:0 12px 30px rgba(0,0,0,.2);max-width:calc(100% - 24px)}
+.bar.show{transform:translate(-50%,0)}
+.bar .t{font-size:14px;white-space:nowrap}
+.bar .t b{color:#f2b8a2}
+.bar button{background:var(--clay);color:#fff;border:0;border-radius:99px;padding:11px 20px;font-weight:700;white-space:nowrap}
+
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(20,26,22,.5);z-index:40;display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:30px 14px}
+.modal.open{display:flex}
+.sheet{background:var(--card);border-radius:22px;max-width:620px;width:100%;padding:28px}
+.sheet h3{margin:0 0 4px;font-size:24px;color:var(--green)}
+.sheet .sub{color:var(--sub);font-size:14px;margin:0 0 20px}
+.picked{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
+.picked span{background:var(--sage);color:var(--green);font-size:13px;padding:5px 10px;border-radius:99px;display:inline-flex;gap:6px;align-items:center}
+.picked button{border:0;background:none;color:var(--green);padding:0;font-size:14px;line-height:1}
+label{display:block;font-size:13px;font-weight:700;margin:14px 0 6px}
+label i{font-style:normal;color:var(--clay)}
+input[type=text],input[type=number],input[type=email],textarea,select{width:100%;border:1px solid var(--line);border-radius:12px;padding:11px 13px;font:inherit;font-size:14px;background:#fff}
+textarea{min-height:80px;resize:vertical}
+.checks{display:flex;flex-wrap:wrap;gap:6px}
+.checks label{margin:0;font-weight:500;border:1px solid var(--line);border-radius:99px;padding:6px 13px;font-size:13px;cursor:pointer;background:#fff}
+.checks input{display:none}
+.checks label.on{background:var(--green);color:#fff;border-color:var(--green)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.two{grid-template-columns:1fr}}
+.warn{background:var(--clay-soft);color:#8a3f25;font-size:13px;border-radius:10px;padding:10px 12px;margin-top:12px;display:none}
+.err{color:#b23b1e;font-size:13px;margin-top:10px;min-height:1em}
+.actions{display:flex;gap:10px;justify-content:flex-end;margin-top:22px;flex-wrap:wrap}
+.actions .cta{padding:12px 22px}
+pre.summary{white-space:pre-wrap;background:var(--sand);border-radius:12px;padding:16px;font-family:inherit;font-size:13px;max-height:300px;overflow:auto}
+.sendbox{display:grid;gap:10px;margin-top:16px}
+.sendbox a,.sendbox button{display:flex;justify-content:space-between;align-items:center;text-decoration:none;border:1px solid var(--line);background:#fff;border-radius:14px;padding:14px 16px;font-weight:700;font-size:14px;color:var(--ink)}
+.sendbox small{font-weight:400;color:var(--sub)}
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:99px;font-size:14px;z-index:50;display:none}
+
+footer{border-top:1px solid var(--line);padding:36px 0 90px;color:var(--sub);font-size:13px}
+footer b{color:var(--ink)}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap">
+  <a class="logo" href="#top">세나컴퍼니<small>SELLER PLATFORM</small></a>
+  <div class="navlinks"><a href="#products">공구 품목</a><a href="#terms">셀러 조건</a><a href="#process">진행 과정</a><a href="#contact">문의</a></div>
+</div></nav>
+
+<header class="hero" id="top"><div class="wrap">
+  <span class="eyebrow">셀러 전용 · 제조사 정품 공동구매</span>
+  <h1>공구할 제품,<br>셀러가 직접 고르세요</h1>
+  <p>제스파·로아벨의 홈케어 디바이스와 뷰티 제품을 한곳에서 둘러보고, 내 채널에 맞는 품목을 골라 바로 신청하세요. 샘플부터 소재, 정산까지 세나컴퍼니가 함께합니다.</p>
+  <div class="btns">
+    <a class="cta" href="#products">공구 품목 둘러보기 →</a>
+    <a class="cta ghost" href="#terms">셀러 조건 보기</a>
+  </div>
+  <div class="stats">
+    <div class="stat"><b id="statCount">23</b><span>진행 가능 품목</span></div>
+    <div class="stat"><b>직접 선택</b><span>희망 수수료</span></div>
+    <div class="stat"><b>2주</b><span>공구 종료 후 정산</span></div>
+    <div class="stat"><b>5개+</b><span>지원 채널</span></div>
+  </div>
+</div></header>
+
+<section id="products" style="padding-top:20px"><div class="wrap">
+  <div class="sec-head">
+    <div><h2>공구 품목</h2><p>마음에 드는 품목을 담고 한 번에 신청하세요. 여러 개 담아도 됩니다.</p></div>
+  </div>
+  <div class="filters">
+    <div class="row"><span class="lab">브랜드</span><div class="row" id="fBrand"></div></div>
+    <div class="row"><span class="lab">카테고리</span><div class="row" id="fCat"></div></div>
+    <div class="row"><span class="lab">검색</span><input class="search" id="q" type="text" placeholder="제품명으로 찾기"></div>
+  </div>
+  <div class="grid" id="grid"></div>
+  <p style="font-size:13px;color:var(--sub);margin-top:18px">· 공구가와 상세 자료(상세페이지·영상·이미지)는 신청 확인 후 개별 안내드립니다.<br>· 권장 팔로워는 참고 기준이며, 채널 성격에 따라 함께 검토합니다.</p>
+</div></section>
+
+<section id="terms" style="background:var(--sand)"><div class="wrap">
+  <div class="sec-head"><div><h2>셀러 조건</h2><p>처음 공구하는 셀러도 부담 없이 시작할 수 있게 준비했습니다.</p></div></div>
+  <div class="cond">
+    <div><b>희망 수수료 직접 선택</b><span>신청할 때 원하는 수수료(판매 금액 기준 %)를 숫자로 적어 주세요. 확인 후 품목별로 최종 확정합니다. 재고 부담은 없습니다.</span></div>
+    <div><b>공구 종료 2주 후 정산</b><span>공구가 끝나면 판매 내역을 확인해 2주 뒤 입금됩니다.</span></div>
+    <div><b>샘플·소재 지원</b><span>사용해 보고 진행할 수 있게 샘플을 보내드리고, 상세페이지·영상·이미지 자료를 제공합니다.</span></div>
+    <div><b>배송·CS 대행</b><span>주문 이후 출고와 고객 응대는 저희가 맡습니다.</span></div>
+    <div><b>제조사 정품</b><span>제스파 공식 공급 제품만 다룹니다. 가품·재고 처분품 걱정이 없습니다.</span></div>
+    <div><b>일정은 협의로</b><span>원하는 시기를 알려주시면 다른 공구와 겹치지 않게 일정을 잡아드립니다.</span></div>
+  </div>
+</div></section>
+
+<section id="process"><div class="wrap">
+  <div class="sec-head"><div><h2>진행 과정</h2></div></div>
+  <div class="steps">
+    <div class="step"><b>품목 선택·신청</b><span>이 페이지에서 담고 신청</span></div>
+    <div class="step"><b>확인·공구가 안내</b><span>1~2일 내 연락</span></div>
+    <div class="step"><b>샘플 발송</b><span>직접 써보고 콘텐츠 준비</span></div>
+    <div class="step"><b>공구 오픈</b><span>소재 제공·배송·CS 지원</span></div>
+    <div class="step"><b>정산</b><span>종료 2주 후 입금</span></div>
+  </div>
+  <div style="margin-top:40px">
+    <h3 style="color:var(--green);margin:0 0 14px">이런 채널의 셀러를 찾습니다</h3>
+    <div class="channels"><span>인스타그램</span><span>틱톡</span><span>유튜브</span><span>그립</span><span>클릭메이트</span><span>블로그</span><span>그 밖의 라이브커머스</span></div>
+  </div>
+</div></section>
+
+<section id="contact" style="background:var(--green);color:#fff"><div class="wrap" style="display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap">
+  <div>
+    <h2 style="margin:0 0 8px;font-size:30px">궁금한 점이 있으신가요?</h2>
+    <p style="margin:0;opacity:.8">인스타그램 DM <b>@sena.beautylab</b> · 이메일 <b>sena.beautylab@gmail.com</b></p>
+  </div>
+  <a class="cta" style="background:#fff;color:var(--green)" href="https://www.instagram.com/sena.beautylab/" target="_blank" rel="noopener">인스타그램 DM 보내기 →</a>
+</div></section>
+
+<footer><div class="wrap">
+  <b>세나컴퍼니</b> · 제스파 공식 공동구매 벤더<br>
+  사업자 정보는 등록 후 게시됩니다.
+</div></footer>
+
+<div class="bar" id="bar"><span class="t"><b id="barN">0</b>개 품목 담음</span><button id="openApply">공구 신청하기</button></div>
+
+<div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const ICON = {
+  device:'<svg class="ic" viewBox="0 0 48 48" fill="none" stroke="#2f4a3a" stroke-width="2"><rect x="10" y="8" width="28" height="32" rx="10"/><circle cx="24" cy="24" r="6"/><path d="M24 14v2M24 32v2"/></svg>',
+  beauty:'<svg class="ic" viewBox="0 0 48 48" fill="none" stroke="#8a3f25" stroke-width="2"><path d="M24 6c6 8 12 14 12 22a12 12 0 0 1-24 0c0-8 6-14 12-22z"/><path d="M18 30a6 6 0 0 0 6 6"/></svg>',
+  diet:'<svg class="ic" viewBox="0 0 48 48" fill="none" stroke="#7a5b2a" stroke-width="2"><path d="M8 30c8-2 12-12 16-12s8 10 16 12"/><path d="M6 36h36"/><circle cx="24" cy="12" r="3"/></svg>'
+};
+const CAT_LABEL = {device:'홈케어 디바이스', beauty:'뷰티', diet:'다이어트·바디'};
+
+// 제스파 '공동구매 상품 가격표'(11월 운영 품목) 기준
+const P = [
+ {id:'ZP5820',opt:'스윙키 보드',brand:'제스파',name:'스윙키 보드',short:'스윙키',cats:['diet','beauty'],price:199000,min:20000,set:'근력밴드 + 루프밴드 구성',desc:'흔들며 타는 홈트 보드. 근력밴드·루프밴드 포함 구성',best:true,note:'일정 자유롭게 선택 가능'},
+ {id:'ZP5725',opt:'에어힙',brand:'제스파',name:'에어힙 골반 온열 마사지기',short:'에어힙',cats:['device'],price:199000,min:5000,desc:'골반 부위를 따뜻하게 감싸는 온열 마사지기'},
+ {id:'ZP2240',opt:'홀딩미',brand:'제스파',name:'홀딩미 팔꿈치 마사지기',short:'홀딩미',cats:['device'],price:199000,min:10000,desc:'골프·테니스 엘보 고민 많은 분들을 위한 팔꿈치 케어'},
+ {id:'ZP5663',opt:'더툴300',brand:'제스파',name:'더툴300 실리콘 어깨 마사지기',short:'더툴300',cats:['device'],price:129000,min:5000,desc:'실리콘 소재 어깨·목 안마구'},
+ {id:'ZP5824',opt:'허리안 프로',brand:'제스파',name:'허리안 프로',short:'허리안 프로',cats:['device'],price:199000,min:10000,desc:'허리를 감싸는 착용형 마사지기'},
+ {id:'ZP5856',opt:'릴로아',brand:'제스파',name:'릴로아 스트레칭 손 마사지기',short:'릴로아',cats:['device'],price:199000,min:10000,desc:'손을 넣고 쉬는 스트레칭 손 마사지기',isNew:true},
+ {id:'ZP2000',opt:'한방 파라핀베스',brand:'제스파',name:'한방 파라핀베스',short:'파라핀베스',cats:['device'],price:129000,min:10000,desc:'손·발 파라핀 케어를 집에서'},
+ {id:'ZP5645',opt:'에어슈',brand:'제스파',name:'에어슈 마사지 부츠',short:'에어슈',cats:['device'],price:199000,min:50000,set:'공구 사은품: 지압판',desc:'공기압 다리 마사지 부츠 · 서인영 PPL 제품',note:'입고 일정 확인 후 진행'},
+ {id:'ZP5840',opt:'단잠',brand:'제스파',name:'수면참견 V3 단잠',short:'단잠',cats:['device'],price:299000,min:50000,set:'커버 택1 (냉감 / 소프트)',desc:'숙면 루틴을 위한 수면 케어 디바이스',isNew:true,note:'일정 사전 협의 필요'},
+ {id:'ZP3829',opt:'펄스코어 EMS',brand:'제스파',name:'펄스코어 전신 EMS',short:'펄스코어',cats:['device'],price:590000,min:10000,desc:'전신 EMS 관리 디바이스'},
+ {id:'ZP5680',opt:'온눅 매트',brand:'제스파',name:'온눅 플렉서블 마사지매트',short:'온눅 매트',cats:['device'],price:399000,min:10000,desc:'누워서 쓰는 전신 마사지 매트',isNew:true},
+ {id:'ZP4055',opt:'코코 지압 슬리퍼',brand:'제스파',name:'코코 지압 슬리퍼',short:'코코 슬리퍼',cats:['beauty','diet'],price:70000,min:10000,desc:'집에서 신는 지압 슬리퍼 (S·M)'},
+ {id:'ZP5844',opt:'셀룰업',brand:'제스파',name:'셀룰업 흡입 괄사 온열 홈부항기',short:'셀룰업',cats:['beauty','diet'],price:159000,min:10000,desc:'흡입·괄사·온열을 한 번에, 바디 라인 케어'},
+ {id:'FZAD070300',opt:'코리아나 쿨링 밸런스 겔',brand:'로아벨 (with 코리아나)',name:'코리아나 쿨링 밸런스 겔',short:'쿨링 겔',cats:['beauty'],price:38000,min:10000,desc:'산뜻하게 진정시키는 쿨링 겔'},
+ {id:'FZAD045503',opt:'누벨리아 넥크림',brand:'로아벨 (with 코리아나)',name:'누벨리아 넥크림',short:'넥크림',cats:['beauty'],price:69000,min:10000,desc:'목 라인 집중 케어 크림'},
+ {id:'FZAD053503',opt:'누벨리아 아이크림',brand:'로아벨 (with 코리아나)',name:'누벨리아 아이크림',short:'아이크림',cats:['beauty'],price:79000,min:10000,desc:'눈가 집중 케어 크림'},
+ {id:'LO1064',opt:'프로메종 무선 고데기',brand:'로아벨 (with 코리아나)',name:'프로메종 무선 고데기',short:'무선 고데기',cats:['beauty'],price:99000,min:10000,desc:'선 없이 들고 다니는 무선 고데기'},
+ {id:'LO1067',opt:'루미오닉',brand:'로아벨 (with 코리아나)',name:'루미오닉 페이셜 마사지기',short:'루미오닉',cats:['beauty'],price:189000,min:10000,desc:'홈케어 페이셜 마사지기'},
+ {id:'LO1071',opt:'넥세라',brand:'로아벨 (with 코리아나)',name:'넥세라 뷰티 디바이스',short:'넥세라',cats:['beauty'],price:199000,min:10000,desc:'목·데콜테 홈케어 디바이스',note:'12월 15일 이후 진행 가능'},
+ {id:'FZAD045510',opt:'넥 케어 세트',brand:'로아벨 (with 코리아나)',name:'로아벨 × 코리아나 넥 케어 세트',short:'넥 케어 세트',cats:['beauty'],price:259000,min:10000,set:'세트 구성',desc:'디바이스와 크림을 함께 쓰는 넥 케어 세트',note:'12월 15일 이후 진행 가능'},
+ {id:'FZAD053510',opt:'아이 케어 세트',brand:'로아벨 (with 코리아나)',name:'로아벨 × 코리아나 아이 케어 세트',short:'아이 케어 세트',cats:['beauty'],price:269000,min:10000,set:'세트 구성',desc:'디바이스와 크림을 함께 쓰는 아이 케어 세트'},
+ {id:'LO1080',opt:'엘루아',brand:'로아벨 (with 코리아나)',name:'엘루아 페이셜 마사지기',short:'엘루아',cats:['beauty'],price:299000,min:10000,desc:'프리미엄 페이셜 홈케어 디바이스'},
+ {id:'LO2050',opt:'스칼토',brand:'로아벨 (with 코리아나)',name:'스칼토 올 케어 마사지기',short:'스칼토',cats:['beauty'],price:329000,min:10000,desc:'두피부터 바디까지 쓰는 올 케어 마사지기'}
+];
+
+const MEDIA = {"ZP5725": {"img": "https://hyeyoun85.diskn.com/I7ZQ93I6OW", "gal": ["https://hyeyoun85.diskn.com/I7ZQ93I6OW"], "det": ["https://hyeyoun85.diskn.com/p7ZQ91BfIO", "https://hyeyoun85.diskn.com/L7ZQ91BnsO", "https://hyeyoun85.diskn.com/X7ZQ91BuNP", "https://hyeyoun85.diskn.com/q7ZQ91BDNb", "https://hyeyoun85.diskn.com/S7ZQ91FcFO", "https://hyeyoun85.diskn.com/m7ZQ91FAk1", "https://hyeyoun85.diskn.com/W7ZQ91GDJA", "https://hyeyoun85.diskn.com/j7ZQ91H9Ml", "https://hyeyoun85.diskn.com/X7ZQ91HJ2D", "https://hyeyoun85.diskn.com/N7ZQ91J7sD", "https://hyeyoun85.diskn.com/Q7ZQ91MEbT", "https://hyeyoun85.diskn.com/k7ZQ91MZAN", "https://hyeyoun85.diskn.com/L7ZQ91NkYi", "https://hyeyoun85.diskn.com/i7ZQ9hsALF", "https://hyeyoun85.diskn.com/d7ZQ91OgzT", "https://hyeyoun85.diskn.com/B7ZQ9iWlfX", "https://hyeyoun85.diskn.com/k7ZQ91QEIA", "https://hyeyoun85.diskn.com/d7ZQ9iWdGa", "https://hyeyoun85.diskn.com/i7ZQ91R3ub", "https://hyeyoun85.diskn.com/N7ZQ91RqQH", "https://hyeyoun85.diskn.com/O7ZQ91RNfL", "https://hyeyoun85.diskn.com/I7ZQ91Vff4", "https://hyeyoun85.diskn.com/f7ZQ91W027", "https://hyeyoun85.diskn.com/M7ZQ921z1u", "https://hyeyoun85.diskn.com/E7ZQ9228Mu", "https://hyeyoun85.diskn.com/E7ZQ922tYk", "https://hyeyoun85.diskn.com/l7ZQ922R43", "https://hyeyoun85.diskn.com/o7ZQ923n3o", "https://hyeyoun85.diskn.com/k7ZQ9259U8", "https://hyeyoun85.diskn.com/x7ZQ91B02o", "https://hyeyoun85.diskn.com/t7ZQ944c1m", "https://hyeyoun85.diskn.com/L7ZQ93HZ0J"], "url": "https://www.zespa.co.kr/goods/goods_view.php?goodsNo=1000001742", "vid": "https://vimeo.com/1099268632"}, "ZP2240": {"img": "https://hyeyoun85.diskn.com/2SOXIIbLKq", "gal": ["https://hyeyoun85.diskn.com/2SOXIIbLKq"], "det": ["https://hyeyoun85.diskn.com/17tEGEso2W", "https://hyeyoun85.diskn.com/1n8v3SstDW", "https://hyeyoun85.diskn.com/27llS4rzX4", "https://hyeyoun85.diskn.com/1n8v3StU94", "https://hyeyoun85.diskn.com/1n8v3SthQG", "https://hyeyoun85.diskn.com/0SdXT0zSRi", "https://hyeyoun85.diskn.com/27llS4ttDa", "https://hyeyoun85.diskn.com/1n8zp4Kx6G", "https://hyeyoun85.diskn.com/1SW9QSJzq8", "https://hyeyoun85.diskn.com/2n1SFIs4CG", "https://hyeyoun85.diskn.com/2SObqguFXK", "https://hyeyoun85.diskn.com/1SW4eqyLRu", "https://hyeyoun85.diskn.com/0nGNrd16Zc", "https://hyeyoun85.diskn.com/0SdXT12bxr", "https://hyeyoun85.diskn.com/2n1SFItvjO", "https://hyeyoun85.diskn.com/27llS4x3wm", "https://hyeyoun85.diskn.com/1SW4eqzstC", "https://hyeyoun85.diskn.com/1n8v3SzDyW", "https://hyeyoun85.diskn.com/1SW4er0oHq", "https://hyeyoun85.diskn.com/2SObqgxF9a", "https://hyeyoun85.diskn.com/2SObqgxUwu", "https://hyeyoun85.diskn.com/37eIduvCom", "https://hyeyoun85.diskn.com/17tEGF31X2", "https://hyeyoun85.diskn.com/2SObqgyT4y", "https://hyeyoun85.diskn.com/0nGNrd51uS", "https://hyeyoun85.diskn.com/0SdXT17I4e", "https://hyeyoun85.diskn.com/37eIduxUG8", "https://hyeyoun85.diskn.com/0nGNrd6dNu", "https://hyeyoun85.diskn.com/0nGNrd6r9m", "https://hyeyoun85.diskn.com/37eIduyAfO", "https://hyeyoun85.diskn.com/37eIduzAHG", "https://hyeyoun85.diskn.com/1SW4er5rOG", "https://hyeyoun85.diskn.com/1n8v3T4oKS"], "url": "https://zespa.co.kr/goods/goods_view.php?goodsNo=1000001395", "vid": ""}, "ZP5663": {"img": "https://hyeyoun85.diskn.com/W7R3wJLOhf", "gal": ["https://hyeyoun85.diskn.com/W7R3wJLOhf"], "det": ["https://hyeyoun85.diskn.com/K8cGYjXqfv", "https://hyeyoun85.diskn.com/k8cGYjXvX1", "https://hyeyoun85.diskn.com/Z8cGYjXBjT", "https://hyeyoun85.diskn.com/C8cGYjXGPq", "https://hyeyoun85.diskn.com/Q8cGYjXM5f", "https://hyeyoun85.diskn.com/z8cGYk0sow", "https://hyeyoun85.diskn.com/k8cGYk1KiB", "https://hyeyoun85.diskn.com/I8cGYk3HhR", "https://hyeyoun85.diskn.com/l8cGYk4pvA", "https://hyeyoun85.diskn.com/t8cGYk5h8j", "https://hyeyoun85.diskn.com/x8cGYk5DVR", "https://hyeyoun85.diskn.com/I8cGYk6Mwr", "https://hyeyoun85.diskn.com/H8cGYk8zsU", "https://hyeyoun85.diskn.com/A8cGYk8SiI", "https://hyeyoun85.diskn.com/S8cGYk9G64", "https://hyeyoun85.diskn.com/H8cGYkbpUl", "https://hyeyoun85.diskn.com/H8cGYkbUVT", "https://hyeyoun85.diskn.com/u8cGYkcDPU"], "url": "https://brand.naver.com/zespa/products/10325953523", "vid": "https://zespa.mycafe24.com/mediateam/library/share.php?id=sh_261019110201_e8026b33db&preview=20260922title2"}, "ZP5824": {"img": "https://hyeyoun85.diskn.com/n87cB16GJ9", "gal": ["https://hyeyoun85.diskn.com/n87cB16GJ9"], "det": ["https://hyeyoun85.diskn.com/C87ed6v0g5", "https://hyeyoun85.diskn.com/K87ed6v7D6", "https://hyeyoun85.diskn.com/q87cB0xdKr", "https://hyeyoun85.diskn.com/z87cEnWODZ", "https://hyeyoun85.diskn.com/Y87cEnWVWm", "https://hyeyoun85.diskn.com/H87cEnX33p", "https://hyeyoun85.diskn.com/A87cB0xxVH", "https://hyeyoun85.diskn.com/D87cB0BEWm", "https://hyeyoun85.diskn.com/l87cB0C1ry", "https://hyeyoun85.diskn.com/Q87cKBWB1p", "https://hyeyoun85.diskn.com/K87cB0D0rG", "https://hyeyoun85.diskn.com/P87cB0ELeq", "https://hyeyoun85.diskn.com/H87cB0GKKm", "https://hyeyoun85.diskn.com/X87cB0J2C8", "https://hyeyoun85.diskn.com/L87cB0JRyP", "https://hyeyoun85.diskn.com/S87cB0Mrfw", "https://hyeyoun85.diskn.com/e87cB0N21B", "https://hyeyoun85.diskn.com/O87cB0OOKK", "https://hyeyoun85.diskn.com/z87cB0Pf6k", "https://hyeyoun85.diskn.com/U87cB0QR9E", "https://hyeyoun85.diskn.com/A87cB0ScCh", "https://hyeyoun85.diskn.com/P87cB0Swky", "https://hyeyoun85.diskn.com/K87cB0UoSS", "https://hyeyoun85.diskn.com/b87cB0W4w8", "https://hyeyoun85.diskn.com/x87cB0XqKb", "https://hyeyoun85.diskn.com/u87cB0Ym75", "https://hyeyoun85.diskn.com/s87cB0YMmP", "https://hyeyoun85.diskn.com/f87cIQUFKv", "https://hyeyoun85.diskn.com/B87cB0Zoil", "https://hyeyoun85.diskn.com/v87cB12AJ2", "https://hyeyoun85.diskn.com/E87cB133je", "https://hyeyoun85.diskn.com/J87cB13FSp", "https://hyeyoun85.diskn.com/J87cB15Ur4", "https://hyeyoun85.diskn.com/w87cB16fZI"], "url": "https://zespa.co.kr/goods/goods_view.php?goodsNo=1000001772", "vid": "https://zespa.mycafe24.com/mediateam/library/share.php?id=sh_261014133937_6d47bc35bd&preview=20260922title2"}, "ZP5856": {"img": "https://hyeyoun85.diskn.com/k8buNMv1up", "gal": ["https://hyeyoun85.diskn.com/k8buNMv1up"], "det": ["https://hyeyoun85.diskn.com/i8buNKy2Io", "https://hyeyoun85.diskn.com/V8buNKyffT", "https://hyeyoun85.diskn.com/e8buNKykG5", "https://hyeyoun85.diskn.com/v8buNKyqmi", "https://hyeyoun85.diskn.com/B8buNKyvOk", "https://hyeyoun85.diskn.com/z8buNKAQbj", "https://hyeyoun85.diskn.com/W8buNKB5rQ", "https://hyeyoun85.diskn.com/E8buNKC5ay", "https://hyeyoun85.diskn.com/T8buNKCln6", "https://hyeyoun85.diskn.com/G8buNKDswx", "https://hyeyoun85.diskn.com/S8buNKDPxA", "https://hyeyoun85.diskn.com/g8buNKEem0", "https://hyeyoun85.diskn.com/W8buNKEWa1", "https://hyeyoun85.diskn.com/L8buNKFcaX", "https://hyeyoun85.diskn.com/t8buNKIgsQ", "https://hyeyoun85.diskn.com/s8buNKJ6sm", "https://hyeyoun85.diskn.com/S8buNKJn90", "https://hyeyoun85.diskn.com/q8buNKJDzY", "https://hyeyoun85.diskn.com/c8buNKJRgF", "https://hyeyoun85.diskn.com/q8buNKKPdh", "https://hyeyoun85.diskn.com/a8buNKLZMD", "https://hyeyoun85.diskn.com/o8buNKMe7G", "https://hyeyoun85.diskn.com/W8buNKMuxB", "https://hyeyoun85.diskn.com/d8buNKMJam", "https://hyeyoun85.diskn.com/E8buNKO6b1", "https://hyeyoun85.diskn.com/h8buNKOXSz", "https://hyeyoun85.diskn.com/B8buNKPgKc"], "url": "https://zespa.co.kr/goods/goods_view.php?goodsNo=1000001788", "vid": "https://www.youtube.com/shorts/96fGa0fVLiw"}, "ZP2000": {"img": "https://hyeyoun85.diskn.com/p7Gm8bCzBo", "gal": ["https://hyeyoun85.diskn.com/p7Gm8bCzBo"], "det": ["https://hyeyoun85.diskn.com/b7H2GeFyVd", "https://hyeyoun85.diskn.com/z7Gm8aULxP", "https://hyeyoun85.diskn.com/h7Gm8aULOl", "https://hyeyoun85.diskn.com/K7Gm8aUEDu", "https://hyeyoun85.diskn.com/t7Gm8aUeQO", "https://hyeyoun85.diskn.com/C7Gm8aVTlb", "https://hyeyoun85.diskn.com/N7Gm8aXUdP", "https://hyeyoun85.diskn.com/L7Gm8aYAKG", "https://hyeyoun85.diskn.com/F7Gm8aZJGz", "https://hyeyoun85.diskn.com/i7Gm8b1es1", "https://hyeyoun85.diskn.com/i7Gm8b1E35", "https://hyeyoun85.diskn.com/b7Gm8b39Ht", "https://hyeyoun85.diskn.com/V7Gm8OO6x1", "https://hyeyoun85.diskn.com/Q7Gm8b4AQa", "https://hyeyoun85.diskn.com/Q7Gm8b4JeL", "https://hyeyoun85.diskn.com/N7Gm8b5etI", "https://hyeyoun85.diskn.com/F7Gm8b7jWZ", "https://hyeyoun85.diskn.com/C7Gm8b7MrL", "https://hyeyoun85.diskn.com/y7Gm8b7U4t", "https://hyeyoun85.diskn.com/K7Gm8baVe9", "https://hyeyoun85.diskn.com/P7Gm8baEMF", "https://hyeyoun85.diskn.com/y7Gm8bcr7d", "https://hyeyoun85.diskn.com/d7Gm8berD3", "https://hyeyoun85.diskn.com/g7Gm8be1cB", "https://hyeyoun85.diskn.com/j7Gm8be1FN", "https://hyeyoun85.diskn.com/U7Gm8bh3Se", "https://hyeyoun85.diskn.com/k7Gm8bj6Km", "https://hyeyoun85.diskn.com/A7Gm8biPVQ", "https://hyeyoun85.diskn.com/S7Gm8bj1S8", "https://hyeyoun85.diskn.com/t7Gm8bl6TW", "https://hyeyoun85.diskn.com/H7Gm8bl24L", "https://hyeyoun85.diskn.com/j7Gm8bnP2k", "https://hyeyoun85.diskn.com/w7Gm8bodWw", "https://hyeyoun85.diskn.com/n7IoHps6xW"], "url": "https://zespa.co.kr/goods/goods_view.php?goodsNo=1150", "vid": ""}, "ZP5645": {"img": "https://zespamshop.co.kr/web/product/big/202608/7a95fdab59b843e938e4197893ff2f2a.jpg", "gal": ["https://zespamshop.co.kr/web/product/big/202608/7a95fdab59b843e938e4197893ff2f2a.jpg", "https://zespamshop.co.kr/web/product/extra/big/202409/6ef75440dc06c3a7dc53c26439bd6860.jpg", "https://zespamshop.co.kr/web/product/extra/big/202407/d446c0c4be26b793266d732077ea40c0.jpg", "https://zespamshop.co.kr/web/product/extra/big/202407/af94eec5b14683628ff3f6a6e226afa7.jpg"], "det": [], "url": "https://zespa.co.kr/goods/goods_view.php?goodsNo=1000001650", "vid": "https://zespa.mycafe24.com/mediateam/library/share.php?id=sh_261014132801_00efcaf91c&preview=20260922title2"}, "ZP5840": {"img": "https://zespamshop.co.kr/web/product/big/202606/da1261bcc63744b2097ea7b70f8c0f3e.jpg", "gal": ["https://zespamshop.co.kr/web/product/big/202606/da1261bcc63744b2097ea7b70f8c0f3e.jpg", "https://zespamshop.co.kr/web/product/extra/big/202602/e8a12464c6d39f5b29fb59fada1fb743.jpg", "https://zespamshop.co.kr/web/product/extra/big/202602/db5c12a9ff51442f6c22eb23c1025284.jpg", "https://zespamshop.co.kr/web/product/extra/big/202602/f5a1ef30262cd32f7cd6ae1f82dd993d.jpg", "https://zespamshop.co.kr/web/product/extra/big/202602/6f9efc330cf6de500947e11541cd8432.jpg", "https://zespamshop.co.kr/web/product/extra/big/202602/1e098de72efb4b23f0fda34b5232d826.jpg"], "det": [], "url": "https://zespa.co.kr/goods/goods_view.php?goodsNo=1000001768", "vid": "https://zespa.mycafe24.com/mediateam/library/share.php?id=sh_261014132550_903e910870&preview=20260922title2"}, "ZP3829": {"img": "https://hyeyoun85.diskn.com/w85hWUqfUb", "gal": ["https://hyeyoun85.diskn.com/w85hWUqfUb"], "det": ["https://hyeyoun85.diskn.com/I85hWTHZm2", "https://hyeyoun85.diskn.com/M85hWTKCHI", "https://hyeyoun85.diskn.com/u85hWTL5h0", "https://hyeyoun85.diskn.com/j85hWTLqHq", "https://hyeyoun85.diskn.com/y85hWTLJib", "https://hyeyoun85.diskn.com/P85hWTM3Cb", "https://hyeyoun85.diskn.com/P85hWTHkNi", "https://hyeyoun85.diskn.com/I85hWTHuaC", "https://hyeyoun85.diskn.com/j85hWTHGJT", "https://hyeyoun85.diskn.com/V85hWTHPjj"], "url": "https://zespa.co.kr/goods/goods_view.php?goodsNo=1000001761", "vid": "https://vimeo.com/1207230661"}, "ZP5680": {"img": "https://hyeyoun85.diskn.com/i7XVtjrtpt", "gal": ["https://hyeyoun85.diskn.com/i7XVtjrtpt"], "det": ["https://hyeyoun85.diskn.com/U7XVtGQX1u", "https://hyeyoun85.diskn.com/b7XVtGR3oo", "https://hyeyoun85.diskn.com/m7XSsFU8gg", "https://hyeyoun85.diskn.com/u7XSsFUfG1", "https://hyeyoun85.diskn.com/T7XSsFUmT0", "https://hyeyoun85.diskn.com/b7XSsFTZvP", "https://hyeyoun85.diskn.com/X7XSte4oTX", "https://hyeyoun85.diskn.com/u7XSte4wVR", "https://hyeyoun85.diskn.com/U7XSte4EUU", "https://hyeyoun85.diskn.com/h7XSte4i0W", "https://hyeyoun85.diskn.com/i7XStewL9I", "https://hyeyoun85.diskn.com/L7XVvtaEbX", "https://hyeyoun85.diskn.com/r7XVvvH6Fy", "https://hyeyoun85.diskn.com/D7XVvuZc6y", "https://hyeyoun85.diskn.com/C7XStASmdh", "https://hyeyoun85.diskn.com/I7XStvzBFp", "https://hyeyoun85.diskn.com/I7XStASfO5", "https://hyeyoun85.diskn.com/l7XStvzIO8", "https://hyeyoun85.diskn.com/p7XStzVrg1", "https://hyeyoun85.diskn.com/M7XStzVxdc", "https://hyeyoun85.diskn.com/k7XStzVemT", "https://hyeyoun85.diskn.com/v7XSthX8ih", "https://hyeyoun85.diskn.com/O7XStD27mN", "https://hyeyoun85.diskn.com/i7XVtiZVt3", "https://hyeyoun85.diskn.com/b7XVtj1iHI", "https://hyeyoun85.diskn.com/F7XVtiV3wm", "https://hyeyoun85.diskn.com/e7XVtiVbmk", "https://hyeyoun85.diskn.com/V7XVtiVjwM", "https://hyeyoun85.diskn.com/N7XVtiVqaF", "https://hyeyoun85.diskn.com/g7XVtiVAI3", "https://hyeyoun85.diskn.com/x7XVuu30sR", "https://hyeyoun85.diskn.com/O7XVuB9Gla", "https://hyeyoun85.diskn.com/n7XVuu37y3", "https://hyeyoun85.diskn.com/F7XVtjrQby", "https://hyeyoun85.diskn.com/t7XVtjsbUE", "https://hyeyoun85.diskn.com/p7XVtjsrfW", "https://hyeyoun85.diskn.com/M7XVtjxOJN", "https://hyeyoun85.diskn.com/i7XVtjyEIu", "https://hyeyoun85.diskn.com/K7XVtjzImp", "https://hyeyoun85.diskn.com/J7XVtjAgJe"], "url": "https://brand.naver.com/zespa/products/11495080581", "vid": ""}, "ZP5844": {"img": "https://hyeyoun85.diskn.com/D87ccJ3QQM", "gal": ["https://hyeyoun85.diskn.com/D87ccJ3QQM"], "det": ["https://hyeyoun85.diskn.com/k8cydwe3Y0", "https://hyeyoun85.diskn.com/r8cFGqZJ9Z", "https://hyeyoun85.diskn.com/O8cydwe9Wo", "https://hyeyoun85.diskn.com/E8cydwefPR", "https://hyeyoun85.diskn.com/r8cydwelaL", "https://hyeyoun85.diskn.com/K8cydwhbVr", "https://hyeyoun85.diskn.com/h8cydwibE4", "https://hyeyoun85.diskn.com/u8cydwk8La", "https://hyeyoun85.diskn.com/R8cyekEp3R", "https://hyeyoun85.diskn.com/G8cydwEmPk", "https://hyeyoun85.diskn.com/X8cydwL4kf", "https://hyeyoun85.diskn.com/B8cydwdXrY", "https://hyeyoun85.diskn.com/t87ccJuqND", "https://hyeyoun85.diskn.com/a87ccJwtvs", "https://hyeyoun85.diskn.com/i87ccJwMbj", "https://hyeyoun85.diskn.com/m87ccJxy9T", "https://hyeyoun85.diskn.com/R87ccJyk9V"], "url": "https://zespa.co.kr/goods/goods_view.php?goodsNo=1000001790", "vid": "https://vimeo.com/1204372073"}, "ZP5820": {"img": "https://zespamshop.co.kr/web/product/big/202610/41b0b4fdc4f83301f0727d1f87f5060e.jpg", "gal": ["https://zespamshop.co.kr/web/product/big/202610/41b0b4fdc4f83301f0727d1f87f5060e.jpg", "https://zespamshop.co.kr/web/product/extra/big/202602/cd23c37bd94ad51e81821cd94d4e694f.jpg", "https://zespamshop.co.kr/web/product/extra/big/202602/dcefd42fee9fc60b25a1b8c3cc967ed5.jpg", "https://zespamshop.co.kr/web/product/extra/big/202602/ed23d1abe6be31d3d2069309f5f22eda.jpg", "https://zespamshop.co.kr/web/product/extra/big/202602/f08fbcdda78ed5172a608aa82e1eee82.jpg", "https://zespamshop.co.kr/web/product/extra/big/202602/fdb6fc420bc780bf69f02c656d072b20.jpg", "https://zespamshop.co.kr/web/product/extra/big/202602/2aca7b9eaa09e81624aa9f1c493041bb.jpg"], "det": [], "url": "https://brand.naver.com/zespa/products/13057934199", "vid": "https://zespa.mycafe24.com/mediateam/library/share.php?id=sh_261014133749_370f93e2c1&preview=20260922title2"}, "FZAD070300": {"img": "https://hyeyoun85.diskn.com/e8aUeq6rqj", "gal": ["https://hyeyoun85.diskn.com/e8aUeq6rqj"], "det": ["https://hyeyoun85.diskn.com/f8aUeq6kOP"], "url": "https://loabell.co.kr/goods/goods_view.php?goodsNo=1000000271", "vid": ""}, "FZAD045503": {"img": "https://hyeyoun85.diskn.com/m8aUfM6LHv", "gal": ["https://hyeyoun85.diskn.com/m8aUfM6LHv"], "det": ["https://hyeyoun85.diskn.com/t8aUeDx5OH"], "url": "https://loabell.co.kr/goods/goods_view.php?goodsNo=1000000272", "vid": "https://vimeo.com/1144433902"}, "FZAD053503": {"img": "https://hyeyoun85.diskn.com/a8aUePBPge", "gal": ["https://hyeyoun85.diskn.com/a8aUePBPge"], "det": ["https://hyeyoun85.diskn.com/f8aUePBJ7n"], "url": "https://loabell.co.kr/goods/goods_view.php?goodsNo=1000000273", "vid": "https://zespa.mycafe24.com/mediateam/library/share.php?id=sh_261014133455_9d4756c4f3&preview=20260922title2"}, "LO1064": {"img": "https://hyeyoun85.diskn.com/G84ZKGIdqM", "gal": ["https://hyeyoun85.diskn.com/G84ZKGIdqM"], "det": ["https://hyeyoun85.diskn.com/H84ZKDsAKC", "https://hyeyoun85.diskn.com/L84ZKDtHpZ", "https://hyeyoun85.diskn.com/m84ZKDuwd3", "https://hyeyoun85.diskn.com/I84ZKDvaO1", "https://hyeyoun85.diskn.com/e84ZKDvtcQ", "https://hyeyoun85.diskn.com/B84ZKDwb0L", "https://hyeyoun85.diskn.com/E84ZKDwAWu", "https://hyeyoun85.diskn.com/s84ZKDxVYF", "https://hyeyoun85.diskn.com/E84ZKDyeiQ", "https://hyeyoun85.diskn.com/x84ZKDz4F6", "https://hyeyoun85.diskn.com/t84ZKDBLMJ", "https://hyeyoun85.diskn.com/q84ZKDNZlX", "https://hyeyoun85.diskn.com/o84ZKDOqUy", "https://hyeyoun85.diskn.com/E84ZKDPy18", "https://hyeyoun85.diskn.com/J84ZKDQBIW", "https://hyeyoun85.diskn.com/Q84ZKDpdJl", "https://hyeyoun85.diskn.com/O84ZKDpkvu", "https://hyeyoun85.diskn.com/k84ZKDpqE0", "https://hyeyoun85.diskn.com/u84ZKDpxai", "https://hyeyoun85.diskn.com/d84ZKDpEv1", "https://hyeyoun85.diskn.com/k84ZKDsg0y"], "url": "https://www.loabell.co.kr/goods/goods_view.php?goodsNo=1000000200", "vid": "https://vimeo.com/1179728296"}, "LO1067": {"img": "https://hyeyoun85.diskn.com/s84ZKbrP5P", "gal": ["https://hyeyoun85.diskn.com/s84ZKbrP5P"], "det": ["https://hyeyoun85.diskn.com/P84ZK5PAEt", "https://hyeyoun85.diskn.com/h84ZK5PLcf", "https://hyeyoun85.diskn.com/v84ZK5PRgq", "https://hyeyoun85.diskn.com/i84ZK5PXeR", "https://hyeyoun85.diskn.com/P84ZK5Q38J", "https://hyeyoun85.diskn.com/O84ZK5SuMZ", "https://hyeyoun85.diskn.com/R84ZK5SQ0r", "https://hyeyoun85.diskn.com/n84ZK5Ta81", "https://hyeyoun85.diskn.com/E84ZK5TrDG", "https://hyeyoun85.diskn.com/E84ZK5WsJX", "https://hyeyoun85.diskn.com/k84ZK5WWmd", "https://hyeyoun85.diskn.com/d84ZK5ZmEH", "https://hyeyoun85.diskn.com/w84ZK5ZIlC", "https://hyeyoun85.diskn.com/N84ZK600E2", "https://hyeyoun85.diskn.com/f84ZK62pnt", "https://hyeyoun85.diskn.com/l84ZK62HO1", "https://hyeyoun85.diskn.com/E84ZK65EVO", "https://hyeyoun85.diskn.com/X84ZK66dTO", "https://hyeyoun85.diskn.com/b84ZK66uZt", "https://hyeyoun85.diskn.com/h84ZK66Nr9"], "url": "https://www.loabell.co.kr/goods/goods_view.php?goodsNo=1000000199", "vid": "https://zespa.mycafe24.com/mediateam/library/share.php?id=sh_261014133224_2fa70e1042&preview=20260922title2"}, "LO1071": {"img": "https://hyeyoun85.diskn.com/P858zDLvFM", "gal": ["https://hyeyoun85.diskn.com/P858zDLvFM"], "det": ["https://hyeyoun85.diskn.com/h858zDOqOZ", "https://hyeyoun85.diskn.com/O858zDOKTv", "https://hyeyoun85.diskn.com/Q858zDP4CE", "https://hyeyoun85.diskn.com/S858zDPmTX", "https://hyeyoun85.diskn.com/B858zDQgg1", "https://hyeyoun85.diskn.com/F858zDRq5b", "https://hyeyoun85.diskn.com/L858zDRXVZ", "https://hyeyoun85.diskn.com/a858zDThKc", "https://hyeyoun85.diskn.com/Z858zDTP6q", "https://hyeyoun85.diskn.com/d858zDVI5v", "https://hyeyoun85.diskn.com/I858zDWaKZ", "https://hyeyoun85.diskn.com/a858zDWNxk", "https://hyeyoun85.diskn.com/Y858zDX7co", "https://hyeyoun85.diskn.com/i858zDXCQr", "https://hyeyoun85.diskn.com/p858zDZk0U", "https://hyeyoun85.diskn.com/u858zE0tsC", "https://hyeyoun85.diskn.com/G858zE1YCM", "https://hyeyoun85.diskn.com/A858zDL1hE", "https://hyeyoun85.diskn.com/N858zDLh0t", "https://hyeyoun85.diskn.com/r858zDLo9L"], "url": "https://loabell.co.kr/goods/goods_view.php?goodsNo=1000000203", "vid": "https://zespa.mycafe24.com/mediateam/library/share.php?id=sh_261014133603_4ae8770f46&preview=20260922title2"}, "FZAD045510": {"img": "https://hyeyoun85.diskn.com/H85jtp50i8", "gal": ["https://hyeyoun85.diskn.com/H85jtp50i8"], "det": ["https://hyeyoun85.diskn.com/e85jslfaCV", "https://hyeyoun85.diskn.com/N855USuNEr", "https://hyeyoun85.diskn.com/T855USv7mI", "https://hyeyoun85.diskn.com/f855USvoXz", "https://hyeyoun85.diskn.com/D855USvKte", "https://hyeyoun85.diskn.com/E855USw2U3", "https://hyeyoun85.diskn.com/o855USxMrT", "https://hyeyoun85.diskn.com/d8574iMnkf", "https://hyeyoun85.diskn.com/s855USy7Ls", "https://hyeyoun85.diskn.com/d855USyr9P", "https://hyeyoun85.diskn.com/K855USyZUP", "https://hyeyoun85.diskn.com/s855USAwaz", "https://hyeyoun85.diskn.com/Y855USASdK", "https://hyeyoun85.diskn.com/n855USBdxO", "https://hyeyoun85.diskn.com/q855USBwf9", "https://hyeyoun85.diskn.com/v855USC5Hv", "https://hyeyoun85.diskn.com/V855USDi25", "https://hyeyoun85.diskn.com/k855USDYgb", "https://hyeyoun85.diskn.com/q855USrCZ6", "https://hyeyoun85.diskn.com/d855USrLn8", "https://hyeyoun85.diskn.com/M855USrSn5", "https://hyeyoun85.diskn.com/W84j9daqpM", "https://hyeyoun85.diskn.com/x84j9dbbWn", "https://hyeyoun85.diskn.com/a84j9ddIgH", "https://hyeyoun85.diskn.com/L84j9deJ24", "https://hyeyoun85.diskn.com/E84j9dfigu", "https://hyeyoun85.diskn.com/j84j9dfJjJ", "https://hyeyoun85.diskn.com/b84j9dh6dM"], "url": "https://loabell.co.kr/goods/goods_view.php?goodsNo=1000000206", "vid": "https://zespa.mycafe24.com/mediateam/library/share.php?id=sh_261014133419_cbc78badae&preview=20260922title2"}, "FZAD053510": {"img": "https://hyeyoun85.diskn.com/Z85jtVKs8f", "gal": ["https://hyeyoun85.diskn.com/Z85jtVKs8f"], "det": ["https://hyeyoun85.diskn.com/x85judwVDG", "https://hyeyoun85.diskn.com/A84WFGmSxp", "https://hyeyoun85.diskn.com/k84WFGn14j", "https://hyeyoun85.diskn.com/T84WFGn9pR", "https://hyeyoun85.diskn.com/W84WFGngZ3", "https://hyeyoun85.diskn.com/G84YfnLK4j", "https://hyeyoun85.diskn.com/W84YfnLRB3", "https://hyeyoun85.diskn.com/O84YfnM1Cq", "https://hyeyoun85.diskn.com/t84WFGqbbt", "https://hyeyoun85.diskn.com/L84WG9zeuy", "https://hyeyoun85.diskn.com/v84WFGrrmk", "https://hyeyoun85.diskn.com/e84WFGrTFM", "https://hyeyoun85.diskn.com/O84j9dilq7", "https://hyeyoun85.diskn.com/V84j9dj8WC", "https://hyeyoun85.diskn.com/a84j9dkgto", "https://hyeyoun85.diskn.com/c84j9dkThR", "https://hyeyoun85.diskn.com/H84j9dmifb", "https://hyeyoun85.diskn.com/I84j9dmIPf", "https://hyeyoun85.diskn.com/j84j9dnNty"], "url": "https://loabell.co.kr/goods/goods_view.php?goodsNo=1000000207", "vid": "https://vimeo.com/1166564367"}, "LO1080": {"img": "https://hyeyoun85.diskn.com/F84ZqwNpvT", "gal": ["https://hyeyoun85.diskn.com/F84ZqwNpvT"], "det": ["https://hyeyoun85.diskn.com/V84ZqwQiOI", "https://hyeyoun85.diskn.com/H84ZqwQEe5", "https://hyeyoun85.diskn.com/a84ZqwQW85", "https://hyeyoun85.diskn.com/M84ZqwRgKb", "https://hyeyoun85.diskn.com/Y84ZqwSILa", "https://hyeyoun85.diskn.com/W84ZqwT7E9", "https://hyeyoun85.diskn.com/f84ZqwTTYV", "https://hyeyoun85.diskn.com/W84ZqwUbAz", "https://hyeyoun85.diskn.com/v84ZqwUCVn", "https://hyeyoun85.diskn.com/w84ZqwW6z8", "https://hyeyoun85.diskn.com/T84ZqwWHXb", "https://hyeyoun85.diskn.com/p84ZqwXkyz", "https://hyeyoun85.diskn.com/h84ZqwXMiF", "https://hyeyoun85.diskn.com/S84Zqx01za", "https://hyeyoun85.diskn.com/U84Zqx0p8G", "https://hyeyoun85.diskn.com/F84Zqx1CvQ", "https://hyeyoun85.diskn.com/o84Zqx1Vlf", "https://hyeyoun85.diskn.com/j84Zqx2pGQ", "https://hyeyoun85.diskn.com/Q84Zqx3tmM", "https://hyeyoun85.diskn.com/y84ZqwMFbX", "https://hyeyoun85.diskn.com/K84ZqwMU7P", "https://hyeyoun85.diskn.com/F84ZqwN1Wh", "https://hyeyoun85.diskn.com/N84ZqwNceu"], "url": "https://loabell.co.kr/goods/goods_view.php?goodsNo=1000000198", "vid": "https://zespa.mycafe24.com/mediateam/library/share.php?id=sh_261014133538_7d0e81dccc&preview=20260922title2"}, "LO2050": {"img": "https://hyeyoun85.diskn.com/v861ElC0GE", "gal": ["https://hyeyoun85.diskn.com/v861ElC0GE"], "det": ["https://hyeyoun85.diskn.com/B861Ek6hfb", "https://hyeyoun85.diskn.com/r861Ek6pPq", "https://hyeyoun85.diskn.com/d861Ek6xqW", "https://hyeyoun85.diskn.com/P861Ek6EZT", "https://hyeyoun85.diskn.com/c861Ek9Faw", "https://hyeyoun85.diskn.com/b861Eka2Ii", "https://hyeyoun85.diskn.com/o861EkamIN", "https://hyeyoun85.diskn.com/h861EkcOzC", "https://hyeyoun85.diskn.com/W861EkdbHD", "https://hyeyoun85.diskn.com/N861EkdX5n", "https://hyeyoun85.diskn.com/n861Ekf20a", "https://hyeyoun85.diskn.com/I861EkgMQv", "https://hyeyoun85.diskn.com/y861Eki3vn", "https://hyeyoun85.diskn.com/v861Ekld78", "https://hyeyoun85.diskn.com/Y861Ekm6GY", "https://hyeyoun85.diskn.com/g861EknP6n", "https://hyeyoun85.diskn.com/k861Ekp2Tv", "https://hyeyoun85.diskn.com/h861EkpI1g", "https://hyeyoun85.diskn.com/P861EkqWS2", "https://hyeyoun85.diskn.com/R861EksuEt", "https://hyeyoun85.diskn.com/c861EktROu", "https://hyeyoun85.diskn.com/K861Ekun0O", "https://hyeyoun85.diskn.com/T861Ekvr6D", "https://hyeyoun85.diskn.com/B861Ekz65u", "https://hyeyoun85.diskn.com/L861EkAtvA", "https://hyeyoun85.diskn.com/o861EkE0MI", "https://hyeyoun85.diskn.com/V861EkEmqE", "https://hyeyoun85.diskn.com/q861EkF7Wj", "https://hyeyoun85.diskn.com/o861Ek63sw"], "url": "https://www.loabell.co.kr/goods/goods_view.php?goodsNo=1000000210", "vid": "https://zespa.mycafe24.com/mediateam/library/share.php?id=sh_261014132926_262a33eb72&preview=20260922title2"}, "ZP4055": {"img": "https://hyeyoun85.diskn.com/E85gkdgz11", "gal": ["https://hyeyoun85.diskn.com/E85gkdgz11"], "det": ["https://hyeyoun85.diskn.com/Y85gkcbPCS", "https://hyeyoun85.diskn.com/b85gkcbXjW", "https://hyeyoun85.diskn.com/c85gkcc7Kh", "https://hyeyoun85.diskn.com/y85gkcckIk", "https://hyeyoun85.diskn.com/B85gkceNHR", "https://hyeyoun85.diskn.com/w85gkcf7n7", "https://hyeyoun85.diskn.com/C85gkcfp6c", "https://hyeyoun85.diskn.com/c85gkcfHZ5", "https://hyeyoun85.diskn.com/Z85gkchSDf", "https://hyeyoun85.diskn.com/t85gkcitoN", "https://hyeyoun85.diskn.com/M85gkciTuQ", "https://hyeyoun85.diskn.com/G85gkcjeEc", "https://hyeyoun85.diskn.com/q85gkcjvZa", "https://hyeyoun85.diskn.com/S85gkcm9DW", "https://hyeyoun85.diskn.com/m85gkcms7x", "https://hyeyoun85.diskn.com/L85gkco0RY", "https://hyeyoun85.diskn.com/v85gkcoLvy", "https://hyeyoun85.diskn.com/X85gkcbwnq"], "url": "https://www.loabell.co.kr/goods/goods_view.php?goodsNo=1000000204", "vid": "https://zespa.mycafe24.com/mediateam/library/share.php?id=sh_261014133301_91eee54b8a&preview=20260922title2"}};
+const BRANDS = ['전체','제스파','로아벨 (with 코리아나)'];
+const CATS = ['전체','device','beauty','diet'];
+const CHANNELS = ['인스타그램','틱톡','유튜브','그립','클릭메이트','블로그','기타'];
+// 신청을 노션 셀러 DB에 자동 등록하는 구글 앱스 스크립트 웹 앱 주소(…/exec).
+// 비어 있으면 신청서를 복사해 DM·메일로 보내는 방식으로 동작합니다.
+const APPLY_URL = 'https://script.google.com/macros/s/AKfycbxh4Tj7EZ8UjWlrW3UrEM64Yk0vnTgiRZDDOCS8yoLT1jY9nvlVa10pGcUuudBMlR2iwQ/exec';
+const EXPS = ['많음(월 2회+)','있음','없음'];
+const state = {brand:'전체', cat:'전체', q:'', sel:new Set(), form:{}};
+const $ = s => document.querySelector(s);
+const won = n => n.toLocaleString('ko-KR')+'원';
+const fmtF = n => n>=10000 ? (n/10000)+'만' : (n/1000)+'천';
+const esc = s => String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+$('#statCount').textContent = P.length;
+
+function chips(el, list, key, label){
+  el.innerHTML = list.map(v=>`<button class="chip ${state[key]===v?'on':''}" data-v="${v}">${label?label(v):v}</button>`).join('');
+  el.onclick = e => { const b=e.target.closest('.chip'); if(!b) return; state[key]=b.dataset.v; renderFilters(); renderGrid(); };
+}
+function renderFilters(){
+  chips($('#fBrand'), BRANDS, 'brand');
+  chips($('#fCat'), CATS, 'cat', v=> v==='전체'?'전체':CAT_LABEL[v]);
+}
+function renderGrid(){
+  const q = state.q.trim();
+  const list = P.filter(p => (state.brand==='전체'||p.brand===state.brand) && (state.cat==='전체'||p.cats.includes(state.cat)) && (!q || (p.name+p.short+p.desc).includes(q)));
+  $('#grid').innerHTML = list.length ? list.map(p=>{
+    const on = state.sel.has(p.id); const c = p.cats[0]; const m = MEDIA[p.id]||{};
+    return `<article class="card ${on?'sel':''}">
+      <div class="thumb ${m.img?'has-img ':''}c-${c}" data-det="${p.id}" style="cursor:pointer">${m.img?`<img class="main" src="${m.img}" alt="${esc(p.name)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentNode.classList.remove('has-img')">`:''}<span class="fb">${ICON[c]}<div class="big">${esc(p.short)}</div></span><div class="badges">${p.best?'<span class="badge best">BEST</span>':''}${p.isNew?'<span class="badge new">NEW</span>':''}</div></div>
+      <div class="body">
+        <span class="brand">${esc(p.brand)} · ${p.cats.map(x=>CAT_LABEL[x]).join(' · ')}</span>
+        <div class="name">${esc(p.name)}</div>
+        <div class="desc">${esc(p.desc)}${p.set?'<br>'+esc(p.set):''}</div>
+        ${p.note?`<span class="note">${esc(p.note)}</span>`:''}
+        <div class="meta"><span>소비자가 <b>${won(p.price)}</b></span><span>권장 팔로워 <b>${fmtF(p.min)}+</b></span></div>
+        <div class="btns2"><button class="detbtn" data-det="${p.id}">상세보기</button><button class="pick" data-id="${p.id}">${on?'✓ 담았어요':'+ 담기'}</button></div>
+      </div></article>`;
+  }).join('') : '<div class="empty">조건에 맞는 품목이 없어요.</div>';
+}
+$('#grid').onclick = e => {
+  const dt = e.target.closest('[data-det]'); if(dt){ openDetail(dt.dataset.det); return; }
+  const b = e.target.closest('.pick'); if(!b) return;
+  const id=b.dataset.id; state.sel.has(id)?state.sel.delete(id):state.sel.add(id);
+  renderGrid(); updateBar();
+};
+$('#q').oninput = e => { state.q=e.target.value; renderGrid(); };
+function updateBar(){ $('#barN').textContent=state.sel.size; $('#bar').classList.toggle('show', state.sel.size>0); }
+
+// ---- product detail
+function openDetail(id){
+  const p=P.find(x=>x.id===id), m=MEDIA[id]||{}, on=state.sel.has(id);
+  const gal=(m.gal&&m.gal.length?m.gal:[m.img]).filter(Boolean);
+  const det=(m.det||[]);
+  $('#sheet').className='sheet pd';
+  $('#sheet').innerHTML=`
+    <div class="top">
+      <div>${gal.length?`<img class="hero-img" id="hero" src="${gal[0]}" alt="${esc(p.name)}" referrerpolicy="no-referrer">`:''}
+        ${gal.length>1?`<div class="gal">${gal.map((g,i)=>`<img src="${g}" data-g="${g}" class="${i?'':'on'}" referrerpolicy="no-referrer" loading="lazy">`).join('')}</div>`:''}</div>
+      <div>
+        <span class="brand">${esc(p.brand)}</span>
+        <h3 style="margin:6px 0 6px">${esc(p.name)}</h3>
+        <p class="sub" style="margin:0">${esc(p.desc)}</p>
+        <dl>
+          <dt>소비자가</dt><dd>${won(p.price)}</dd>
+          <dt>구성</dt><dd>${esc(p.set||'단품')}</dd>
+          <dt>권장 팔로워</dt><dd>${fmtF(p.min)}+</dd>
+          <dt>공구가</dt><dd>신청 확인 후 개별 안내</dd>
+          ${p.note?`<dt>진행 안내</dt><dd style="color:var(--clay)">${esc(p.note)}</dd>`:''}
+        </dl>
+        <button class="cta" id="pdPick" style="width:100%;justify-content:center">${on?'✓ 공구 리스트에 담았어요':'+ 공구 리스트에 담기'}</button>
+        <div class="links">
+          ${m.url?`<a href="${m.url}" target="_blank" rel="noopener">공식 상세페이지 ↗</a>`:''}
+          ${m.vid?`<a href="${m.vid}" target="_blank" rel="noopener">제품 영상 ↗</a>`:''}
+        </div>
+      </div>
+    </div>
+    ${det.length?`<div class="detail"><h3 style="margin:0 0 12px;color:var(--green)">상세 정보</h3><div class="wrap-imgs" id="dw">${det.map(u=>`<img src="${u}" loading="lazy" referrerpolicy="no-referrer" alt="">`).join('')}</div><button class="more" id="dmore">상세 정보 더보기 ↓</button></div>`:''}
+    <div class="actions"><button class="cta ghost" id="pdClose">닫기</button></div>`;
+  const g=$('#sheet').querySelector('.gal');
+  if(g) g.onclick=e=>{const im=e.target.closest('img'); if(!im) return; $('#hero').src=im.dataset.g; g.querySelectorAll('img').forEach(x=>x.classList.toggle('on',x===im));};
+  $('#pdPick').onclick=()=>{ state.sel.has(id)?state.sel.delete(id):state.sel.add(id); renderGrid(); updateBar(); $('#pdPick').textContent=state.sel.has(id)?'✓ 공구 리스트에 담았어요':'+ 공구 리스트에 담기'; };
+  const mo=$('#dmore'); if(mo) mo.onclick=()=>{ $('#dw').classList.add('open'); mo.remove(); };
+  $('#pdClose').onclick=closeModal;
+  $('#modal').classList.add('open'); $('#modal').scrollTop=0;
+}
+
+// ---- apply form
+function picked(){ return P.filter(p=>state.sel.has(p.id)); }
+function openForm(){
+  $('#sheet').className='sheet';
+  const f = state.form;
+  $('#sheet').innerHTML = `
+    <h3>공구 신청</h3><p class="sub">확인 후 1~2일 안에 공구가와 자료를 보내드릴게요.</p>
+    <div class="picked" id="pk"></div>
+    <form id="fm" novalidate>
+      <div class="two">
+        <div><label>활동명 <i>*</i></label><input type="text" name="name" value="${esc(f.name)}" placeholder="예: 세나맘"></div>
+        <div><label>대표 계정 링크 <i>*</i></label><input type="text" name="link" value="${esc(f.link)}" placeholder="@아이디 또는 링크"></div>
+      </div>
+      <label>활동 채널 <i>*</i></label>
+      <div class="checks" id="ch">${CHANNELS.map(c=>`<label class="${(f.ch||[]).includes(c)?'on':''}"><input type="checkbox" value="${c}" ${(f.ch||[]).includes(c)?'checked':''}>${c}</label>`).join('')}</div>
+      <div class="two">
+        <div><label>희망 수수료 (%) <i>*</i></label><input type="number" name="fee" min="0" max="100" step="0.5" inputmode="decimal" value="${esc(f.fee)}" placeholder="숫자만 입력 (예: 15)"></div>
+        <div><label>공구 경험</label><select name="exp"><option value="">선택 안 함</option>${EXPS.map(x=>`<option ${f.exp===x?'selected':''}>${x}</option>`).join('')}</select></div>
+      </div>
+      <p style="font-size:12px;color:var(--sub);margin:6px 0 0">판매 금액 기준이에요. 확인 후 품목별로 최종 확정합니다.</p>
+      <div class="two">
+        <div><label>팔로워·구독자 수 <i>*</i></label><input type="number" name="fol" min="0" value="${esc(f.fol)}" placeholder="숫자만 입력"></div>
+        <div><label>희망 공구 시기</label><select name="when">${['가능한 빨리','2주 이내','이번 달','다음 달','협의'].map(w=>`<option ${f.when===w?'selected':''}>${w}</option>`).join('')}</select></div>
+      </div>
+      <div class="warn" id="warn"></div>
+      <div class="two">
+        <div><label>연락처 (휴대폰 또는 카톡 ID) <i>*</i></label><input type="text" name="phone" value="${esc(f.phone)}"></div>
+        <div><label>이메일</label><input type="email" name="email" value="${esc(f.email)}"></div>
+      </div>
+      <label>하고 싶은 말</label>
+      <textarea name="memo" placeholder="예: 홈트 콘텐츠 위주, 지난달 뷰티 디바이스 공구 진행">${esc(f.memo)}</textarea>
+      <div class="err" id="err"></div>
+      <div class="actions"><button type="button" class="cta ghost" id="cancel">더 둘러보기</button>${APPLY_URL?'<a class="cta" id="go" href="#" target="_blank" rel="noopener">공구 신청하기</a>':'<button type="submit" class="cta">신청서 만들기</button>'}</div>
+    </form>`;
+  renderPicked();
+  const fm = $('#fm');
+  $('#ch').onchange = e => { e.target.parentElement.classList.toggle('on', e.target.checked); save(); };
+  fm.oninput = () => { save(); checkFol(); };
+  $('#cancel').onclick = closeModal;
+  fm.onsubmit = e => { e.preventDefault(); save(); submit(); };
+  const go = $('#go');
+  if(go){
+    const sync = () => { save(); go.href = applyHref(); };
+    fm.addEventListener('input', sync); fm.addEventListener('change', sync); sync();
+    go.onclick = e => { save(); const miss = missing(); if(miss.length){ e.preventDefault(); $('#err').textContent = miss.join(', ')+'을(를) 입력해 주세요.'; return; } go.href = applyHref(); setTimeout(sent, 300); };
+  }
+  checkFol();
+  $('#modal').classList.add('open');
+}
+function renderPicked(){
+  const el=$('#pk'); if(!el) return;
+  el.innerHTML = picked().map(p=>`<span>${esc(p.name)} <button data-id="${p.id}" aria-label="빼기">×</button></span>`).join('') || '<span>담은 품목이 없어요</span>';
+  el.onclick = e => { const b=e.target.closest('button'); if(!b) return; state.sel.delete(b.dataset.id); renderPicked(); renderGrid(); updateBar(); checkFol(); };
+}
+function save(){
+  const fm=$('#fm'); if(!fm) return;
+  const d=Object.fromEntries(new FormData(fm).entries());
+  d.ch=[...fm.querySelectorAll('#ch input:checked')].map(i=>i.value);
+  state.form=d;
+}
+function checkFol(){
+  const n=+state.form.fol||0, w=$('#warn'); if(!w) return;
+  const low = n ? picked().filter(p=>n<p.min) : [];
+  w.style.display = low.length?'block':'none';
+  w.innerHTML = low.length ? `${low.map(p=>esc(p.short)).join(', ')}은(는) 권장 팔로워보다 적어요. 그래도 신청하실 수 있고, 채널 성격을 보고 함께 검토할게요.` : '';
+}
+function summaryText(){
+  const f=state.form;
+  return `[세나컴퍼니 공구 신청]
+활동명: ${f.name}
+계정: ${f.link}
+채널: ${(f.ch||[]).join(', ')}
+팔로워: ${(+f.fol).toLocaleString('ko-KR')}
+희망 수수료: ${f.fee}%${f.exp?'\n공구 경험: '+f.exp:''}
+희망 시기: ${f.when}
+연락처: ${f.phone}${f.email?'\n이메일: '+f.email:''}
+
+신청 품목 (${state.sel.size}개)
+${picked().map(p=>'- '+p.name+' ('+p.id+')').join('\n')}
+${f.memo?'\n메모: '+f.memo:''}`;
+}
+function missing(){
+  const f=state.form, miss=[];
+  if(!state.sel.size) miss.push('신청 품목');
+  if(!f.name) miss.push('활동명'); if(!f.link) miss.push('계정 링크');
+  if(!(f.ch||[]).length) miss.push('활동 채널'); if(!f.fol) miss.push('팔로워 수');
+  if(f.fee===undefined||f.fee===''||isNaN(+f.fee)||+f.fee<0||+f.fee>100) miss.push('희망 수수료(0~100 숫자)');
+  if(!f.phone) miss.push('연락처');
+  return miss;
+}
+function applyHref(){
+  const f=state.form, q=new URLSearchParams({src:'sena', name:f.name||'', link:f.link||'', ch:(f.ch||[]).join('|'), fol:f.fol||'', fee:f.fee||'', when:f.when||'', exp:f.exp||'', phone:f.phone||'', email:f.email||'', memo:(f.memo||'').slice(0,800), items:picked().map(p=>p.opt).join('|')});
+  return APPLY_URL+'?'+q.toString();
+}
+function sent(){
+  $('#sheet').innerHTML = `<h3>신청을 보냈어요</h3><p class="sub">새 창에 <b>신청이 접수됐어요</b> 화면이 보이면 접수 완료예요. 확인 후 1~2일 안에 연락드릴게요.</p>
+    <div class="actions"><button class="cta" id="done">닫기</button></div>`;
+  $('#done').onclick = () => { state.sel.clear(); state.form={}; renderGrid(); updateBar(); closeModal(); };
+}
+function submit(){
+  const f=state.form, miss=missing();
+  if(miss.length){ $('#err').textContent = miss.join(', ')+'을(를) 입력해 주세요.'; return; }
+  const txt=summaryText();
+  const mail='mailto:sena.beautylab@gmail.com?subject='+encodeURIComponent('[공구 신청] '+f.name)+'&body='+encodeURIComponent(txt);
+  $('#sheet').innerHTML = `
+    <h3>신청서가 준비됐어요</h3>
+    <p class="sub">아래 두 방법 중 편한 쪽으로 보내주시면 신청이 접수됩니다.</p>
+    <pre class="summary">${esc(txt)}</pre>
+    <div class="sendbox">
+      <button id="cp">① 신청서 복사하기 <small>복사 후 인스타 DM에 붙여넣기</small></button>
+      <a href="https://ig.me/m/sena.beautylab" target="_blank" rel="noopener">② 인스타그램 DM 열기 <small>@sena.beautylab</small></a>
+      <a href="${mail}">또는 이메일로 보내기 <small>sena.beautylab@gmail.com</small></a>
+    </div>
+    <div class="actions"><button class="cta ghost" id="back">수정하기</button><button class="cta" id="done">닫기</button></div>`;
+  $('#cp').onclick = async () => {
+    try{ await navigator.clipboard.writeText(txt); toast('복사했어요. 인스타 DM에 붙여넣어 주세요'); }
+    catch(e){ toast('복사가 막혀 있어요. 위 내용을 길게 눌러 복사해 주세요'); }
+  };
+  $('#back').onclick = openForm;
+  $('#done').onclick = closeModal;
+}
+function closeModal(){ $('#modal').classList.remove('open'); }
+$('#modal').onclick = e => { if(e.target.id==='modal') closeModal(); };
+$('#openApply').onclick = openForm;
+function toast(m){ const t=$('#toast'); t.textContent=m; t.style.display='block'; clearTimeout(t._h); t._h=setTimeout(()=>t.style.display='none',2600); }
+
+renderFilters(); renderGrid(); updateBar();
+</script>
+</body>
+</html>
