@@ -274,7 +274,7 @@ pre.summary{white-space:pre-wrap;background:var(--bg);border-radius:12px;padding
     <input class="search" id="q" type="search" placeholder="제품명으로 찾기">
   </div>
   <div class="grid" id="grid"></div>
-  <p style="font-size:12.5px;color:var(--sub);margin-top:16px">· 공구가와 상세 자료(상세페이지·영상·이미지)는 신청 확인 후 개별 안내드립니다. · 권장 팔로워는 참고 기준이며 채널 성격에 따라 함께 검토합니다.</p>
+  <p style="font-size:12.5px;color:var(--sub);margin-top:16px">· 공구가와 상세 자료(상세페이지·영상·이미지)는 신청 확인 후 개별 안내드립니다. · 팔로워 수와 상관없이 누구나 신청할 수 있어요.</p>
 </div></section>
 
 <section id="terms" style="background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)"><div class="wrap">
@@ -402,7 +402,7 @@ function renderGrid(){
         <div class="name">${esc(p.name)}</div>
         <div class="desc">${esc(p.desc)}${p.set?'<br>'+esc(p.set):''}</div>
         ${p.note?`<span class="note">${esc(p.note)}</span>`:''}
-        <div class="meta"><span>소비자가 <b>${won(p.price)}</b></span><span>권장 팔로워 <b>${fmtF(p.min)}+</b></span></div>
+        <div class="meta"><span>소비자가 <b>${won(p.price)}</b></span></div>
         <div class="btns2"><button class="detbtn" data-det="${p.id}">상세보기</button><button class="pick" data-id="${p.id}">${on?'✓ 담았어요':'+ 담기'}</button></div>
       </div></article>`;
   }).join('') : '<div class="empty">조건에 맞는 품목이 없어요.</div>';
@@ -434,7 +434,6 @@ function openDetail(id){
         <dl>
           <dt>소비자가</dt><dd>${won(p.price)}</dd>
           <dt>구성</dt><dd>${esc(p.set||'단품')}</dd>
-          <dt>권장 팔로워</dt><dd>${fmtF(p.min)}+</dd>
           <dt>공구가</dt><dd>신청 확인 후 개별 안내</dd>
           ${p.note?`<dt>진행 안내</dt><dd style="color:var(--clay)">${esc(p.note)}</dd>`:''}
         </dl>
@@ -515,12 +514,7 @@ function save(){
   d.ch=[...fm.querySelectorAll('#ch input:checked')].map(i=>i.value);
   state.form=d;
 }
-function checkFol(){
-  const n=+state.form.fol||0, w=$('#warn'); if(!w) return;
-  const low = n ? picked().filter(p=>n<p.min) : [];
-  w.style.display = low.length?'block':'none';
-  w.innerHTML = low.length ? `${low.map(p=>esc(p.short)).join(', ')}은(는) 권장 팔로워보다 적어요. 그래도 신청하실 수 있고, 채널 성격을 보고 함께 검토할게요.` : '';
-}
+function checkFol(){} // 팔로워 기준 안내는 쓰지 않음
 function summaryText(){
   const f=state.form;
   return `[세나컴퍼니 공구 신청]
