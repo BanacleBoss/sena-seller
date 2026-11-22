@@ -37,7 +37,7 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:6
 .navlinks a{text-decoration:none;color:var(--sub);font-weight:500}
 .navlinks a:hover{color:var(--blue)}
 .navcta{background:var(--blue);color:#fff!important;padding:8px 16px;border-radius:99px}
-@media(max-width:760px){.navlinks a:not(.navcta){display:none}}
+@media(max-width:760px){.navlinks{gap:14px}.navlinks a:not(.navcta):not(.navabout){display:none}}
 
 /* hero */
 .hero{position:relative;overflow:hidden;color:#fff;background:radial-gradient(1200px 500px at 85% -10%,rgba(34,195,238,.35),transparent 60%),radial-gradient(900px 500px at 0% 110%,rgba(26,86,219,.55),transparent 60%),linear-gradient(160deg,#0b1f4b 0%,#10306f 55%,#1446b8 100%)}
@@ -284,7 +284,7 @@ pre.summary{white-space:pre-wrap;background:var(--bg);border-radius:12px;padding
 
 <nav><div class="wrap">
   <a class="logo" href="#top"><span class="mk">S</span>세나컴퍼니<small class="en">SELLER</small></a>
-  <div class="navlinks"><a href="#products">공구 품목</a><a href="#calc">수익 계산</a><a href="#terms">셀러 조건</a><a href="#process">진행 과정</a><a class="navcta" href="#products">공구 신청</a></div>
+  <div class="navlinks"><a class="navabout" href="./about.html">회사소개</a><a href="#products">공구 품목</a><a href="#calc">수익 계산</a><a href="#terms">셀러 조건</a><a href="#process">진행 과정</a><a class="navcta" href="#products">공구 신청</a></div>
 </div></nav>
 
 <header class="hero" id="top"><div class="wrap">
@@ -407,7 +407,7 @@ pre.summary{white-space:pre-wrap;background:var(--bg);border-radius:12px;padding
 
 <footer><div class="wrap">
   <div class="top">
-    <div><div class="fl">세나컴퍼니</div><div style="margin-top:4px">제스파 공식 파트너 공동구매 벤더</div></div>
+    <div><div class="fl">세나컴퍼니</div><div style="margin-top:4px">제스파 공식 파트너 공동구매 벤더 · <a class="t" href="./about.html">회사소개</a></div></div>
     <div class="brands">
       <a href="https://zespa.co.kr" target="_blank" rel="noopener"><img src="https://cdn-pro-web-221-144.cdn-nhncommerce.com/zespatr8166_godomall_com/data/skin/front/moment/img/banner/9e0df91f510632b386e1682fb75086ca_64956.png" alt="ZESPA" referrerpolicy="no-referrer">공식몰 ↗</a>
       <a href="https://loabell.co.kr" target="_blank" rel="noopener"><img src="https://cdn-saas-web-135-210.cdn-nhncommerce.com/zespa_godomall_com/data/skin/front/LOABELL/img/banner/1bb87d41d15fe27b500a4bfcde01bb0e_79822.png" alt="LOABELL" referrerpolicy="no-referrer">공식몰 ↗</a>
