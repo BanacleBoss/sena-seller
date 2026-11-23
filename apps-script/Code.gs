@@ -310,7 +310,7 @@ function pickImgs_(seg, abs) {
     const a = abs(u);
     if (out.indexOf(a) < 0) out.push(a);
   });
-  return out.slice(0, 40);
+  return out.slice(0, 80);
 }
 
 function allowedItems_() {
