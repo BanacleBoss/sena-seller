@@ -257,14 +257,14 @@ pre.summary{white-space:pre-wrap;background:var(--bg);border-radius:12px;padding
 
 /* MD pick */
 .picks{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.pickcard{position:relative;background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden;display:grid;grid-template-columns:120px 1fr;align-items:center;gap:0;box-shadow:var(--shadow);cursor:pointer;text-align:left;padding:0;font:inherit;color:inherit}
-.pickcard .pimg{width:120px;height:120px;background:#fff;display:grid;place-items:center;border-right:1px solid var(--line)}
+.pickcard{position:relative;width:100%;min-height:120px;background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden;display:grid;grid-template-columns:120px 1fr;align-items:stretch;gap:0;box-shadow:var(--shadow);cursor:pointer;text-align:left;padding:0;font:inherit;color:inherit}
+.pickcard .pimg{width:120px;height:100%;min-height:120px;overflow:hidden;background:#fff;display:grid;place-items:center;border-right:1px solid var(--line)}
 .pickcard .pimg img{width:100%;height:100%;object-fit:contain}
-.pickcard .pbody{padding:14px 16px}
+.pickcard .pbody{padding:14px 16px;align-self:center}
 .pickcard .rank{font-size:11px;font-weight:700;color:#fff;background:var(--blue);border-radius:6px;padding:2px 7px}
 .pickcard b{display:block;font-size:15.5px;margin:6px 0 2px;color:var(--navy)}
 .pickcard span.why2{font-size:12.5px;color:var(--sub);line-height:1.5;display:block}
-@media(max-width:860px){.picks{grid-template-columns:1fr}.pickcard{grid-template-columns:96px 1fr}.pickcard .pimg{width:96px;height:96px}}
+@media(max-width:860px){.picks{grid-template-columns:1fr}.pickcard{grid-template-columns:96px 1fr}.pickcard .pimg{width:96px;min-height:96px}}
 
 /* calculator */
 .calc{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;align-items:stretch}
@@ -346,7 +346,7 @@ pre.summary{white-space:pre-wrap;background:var(--bg);border-radius:12px;padding
 
 <section id="picks" style="padding-top:0"><div class="wrap">
   <div class="sec-head"><span class="eyebrow en">MD PICK</span><h2>이번 주 추천 품목</h2><p>무엇을 공구할지 고민된다면 여기서 시작하세요.</p></div>
-  <div class="picks" id="picks"></div>
+  <div class="picks" id="pickList"></div>
 </div></section>
 
 <section id="products" style="padding-top:0"><div class="wrap">
@@ -728,11 +728,11 @@ let PICKS = [
   {id:'ZP4055', why:'소비자가 7만원대로 부담이 적어 첫 공구로 시작하기 좋아요.'}
 ];
 function renderPicks(){
-  $('#picks').innerHTML = PICKS.map((k,i)=>{ const p=P.find(x=>x.id===k.id), m=MEDIA[k.id]||{}; if(!p) return '';
+  $('#pickList').innerHTML = PICKS.map((k,i)=>{ const p=P.find(x=>x.id===k.id), m=MEDIA[k.id]||{}; if(!p) return '';
   return `<button class="pickcard" data-det="${p.id}"><span class="pimg">${m.img?`<img src="${m.img}" alt="${esc(p.name)}" loading="lazy" referrerpolicy="no-referrer">`:''}</span><span class="pbody"><span class="rank">PICK ${i+1}</span><b>${esc(p.name)}</b><span class="why2">${esc(k.why)}</span></span></button>`; }).join('');
 }
 renderPicks();
-$('#picks').onclick = e => { const b=e.target.closest('[data-det]'); if(b) openDetail(b.dataset.det); };
+$('#pickList').onclick = e => { const b=e.target.closest('[data-det]'); if(b) openDetail(b.dataset.det); };
 
 // ---- 수익 계산기
 let fillCalc=()=>{};
