@@ -380,10 +380,10 @@ function clip_(s, n) { return String(s || '').trim().slice(0, n); }
 function page_(title, msg, ok) {
   const html = '<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">'
     + '<meta name="viewport" content="width=device-width,initial-scale=1"><title>세나컴퍼니</title>'
-    + '<style>body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:#eaf1ff;color:#0b1f4b;display:flex;min-height:100vh;align-items:center;justify-content:center}'
-    + '.c{background:#fff;border:1px solid #d6e2fb;border-radius:22px;padding:36px 30px;max-width:420px;margin:20px;text-align:center;box-shadow:0 12px 40px rgba(11,31,75,.08)}'
-    + '.i{font-size:44px}h1{font-size:22px;color:#1a56db;margin:12px 0 8px}p{color:#4a5876;line-height:1.6;margin:0;word-break:keep-all}'
-    + 'a{display:inline-block;margin-top:20px;color:#1a56db;font-weight:700;text-decoration:none}</style></head>'
+    + '<style>body{margin:0;font-family:Pretendard,system-ui,-apple-system,sans-serif;background:#FAF7EF;color:#303A36;display:flex;min-height:100vh;align-items:center;justify-content:center}'
+    + '.c{background:#FFFDF8;border:1px solid #E7E1D3;border-radius:22px;padding:36px 30px;max-width:420px;margin:20px;text-align:center;box-shadow:0 12px 40px rgba(48,58,54,.08)}'
+    + '.i{font-size:44px}h1{font-size:22px;color:#08745E;margin:12px 0 8px}p{color:#4E5853;line-height:1.6;margin:0;word-break:keep-all}'
+    + 'a{display:inline-block;margin-top:20px;color:#08745E;font-weight:700;text-decoration:none}</style></head>'
     + '<body><div class="c"><div class="i">' + (ok ? '✅' : '⚠️') + '</div><h1>' + esc_(title) + '</h1><p>' + esc_(msg) + '</p>'
     + '<a href="https://senacompany.co.kr" target="_top">세나컴퍼니 홈으로</a>'
     + '<p style="margin-top:14px;font-size:13px">이 창은 닫으셔도 됩니다.</p></div></body></html>';
