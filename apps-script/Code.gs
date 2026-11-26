@@ -119,7 +119,7 @@ function handleApply_(p, isPost) {
   if (res.code !== 200) {
     console.error(res.text);
     cache.remove(key); // 실패했으면 다시 신청할 수 있게 표시를 지움
-    return page_('접수 중 문제가 생겼어요', '잠시 후 다시 시도하시거나 인스타그램 @sena.beautylab 으로 DM 주세요.', false);
+    return page_('접수 중 문제가 생겼어요', '잠시 후 다시 시도하시거나 인스타그램 @senacompany_sns 으로 DM 주세요.', false);
   }
 
   try { notify_(p, name, items, channels, dup, res.json.url); } catch (err) { console.error(err); }
