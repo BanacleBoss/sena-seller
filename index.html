@@ -390,6 +390,7 @@ footer .top{border-bottom-color:rgba(250,247,239,.14)}
 .phil-note{text-align:center;color:var(--sub);font-size:13.5px;margin:20px 0 0}
 @media(max-width:860px){.phil{grid-template-columns:1fr}.phil article{padding:22px 20px}}
 .why .ic2{background:var(--sky)}
+.card .meta{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:baseline}.card .meta span{font-size:12.5px;color:var(--sub);font-weight:500}.card .meta .gp{color:var(--green);font-weight:700}
 </style>
 </head>
 <body>
@@ -452,7 +453,7 @@ footer .top{border-bottom-color:rgba(250,247,239,.14)}
 </div></section>
 
 <section id="products" style="padding-top:0"><div class="wrap">
-  <div class="sec-head"><span class="eyebrow en">PRODUCTS</span><h2>공구 품목</h2><p>마음에 드는 품목을 담고 한 번에 신청하세요. 사진을 누르면 상세 정보를 볼 수 있어요.</p></div>
+  <div class="sec-head"><span class="eyebrow en">PRODUCTS</span><h2>공구 품목</h2><p>공구하고 싶은 품목을 고르고 한 번에 신청하세요. 사진을 누르면 상세 정보를 볼 수 있어요.</p></div>
   <div class="filters">
     <div class="frow" id="fBrand"></div>
     <div class="frow" id="fCat"></div>
@@ -513,7 +514,7 @@ footer .top{border-bottom-color:rgba(250,247,239,.14)}
 <section id="process"><div class="wrap">
   <div class="sec-head"><span class="eyebrow en">PROCESS</span><h2>진행 과정</h2></div>
   <div class="steps">
-    <div class="step"><b>품목 선택·신청</b><span>이 페이지에서 담고 신청</span></div>
+    <div class="step"><b>품목 선택·신청</b><span>이 페이지에서 품목 고르고 신청</span></div>
     <div class="step"><b>확인·공구가 안내</b><span>1~2일 안에 연락</span></div>
     <div class="step"><b>샘플 발송</b><span>써 보고 공구 일정·콘텐츠 준비</span></div>
     <div class="step"><b>공구 오픈</b><span>소재 제공·배송·CS 지원</span></div>
@@ -563,7 +564,7 @@ footer .top{border-bottom-color:rgba(250,247,239,.14)}
   </div>
 </div></footer>
 
-<div class="bar" id="bar"><span class="t"><b id="barN">0</b>개 품목 담음</span><button id="openApply">공구 신청하기</button></div>
+<div class="bar" id="bar"><span class="t"><b id="barN">0</b>개 품목 선택</span><button id="openApply">공구 신청하기</button></div>
 
 <div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
 <div class="toast" id="toast"></div>
@@ -639,8 +640,8 @@ function renderGrid(){
         <div class="name">${esc(p.name)}</div>
         <div class="desc">${esc(p.desc)}${p.set?'<br>'+esc(p.set):''}</div>
         ${p.note?`<span class="note">${esc(p.note)}</span>`:''}
-        <div class="meta"><span>소비자가 <b>${won(p.price)}</b></span></div>
-        <div class="btns2"><button class="detbtn" data-det="${p.id}">상세보기</button><button class="pick" data-id="${p.id}">${on?'✓ 담았어요':'+ 담기'}</button></div>
+        <div class="meta"><span>소비자가 ${won(p.price)}</span><span class="gp">공구가 별도 안내</span></div>
+        <div class="btns2"><button class="detbtn" data-det="${p.id}">상세보기</button><button class="pick" data-id="${p.id}">${on?'✓ 신청 선택됨':'+ 공구 신청'}</button></div>
       </div></article>`;
   }).join('') : '<div class="empty">조건에 맞는 품목이 없어요.</div>';
 }
@@ -674,7 +675,7 @@ function openDetail(id){
           <dt>공구가</dt><dd>신청 확인 후 개별 안내</dd>
           ${p.note?`<dt>진행 안내</dt><dd style="color:var(--clay)">${esc(p.note)}</dd>`:''}
         </dl>
-        <button class="cta" id="pdPick" style="width:100%;justify-content:center">${on?'✓ 공구 리스트에 담았어요':'+ 공구 리스트에 담기'}</button>
+        <button class="cta" id="pdPick" style="width:100%;justify-content:center">${on?'✓ 신청할 품목으로 선택됨':'+ 이 품목 공구 신청하기'}</button>
         <div class="links">
           ${m.url?`<a href="${m.url}" target="_blank" rel="noopener">공식 상세페이지 ↗</a>`:''}
           ${m.vid?`<a href="${m.vid}" target="_blank" rel="noopener">제품 영상 ↗</a>`:''}
@@ -685,7 +686,7 @@ function openDetail(id){
     <div class="actions"><button class="cta ghost" id="pdClose">닫기</button></div>`;
   const g=$('#sheet').querySelector('.gal');
   if(g) g.onclick=e=>{const im=e.target.closest('img'); if(!im) return; $('#hero').src=im.dataset.g; g.querySelectorAll('img').forEach(x=>x.classList.toggle('on',x===im));};
-  $('#pdPick').onclick=()=>{ state.sel.has(id)?state.sel.delete(id):state.sel.add(id); renderGrid(); updateBar(); $('#pdPick').textContent=state.sel.has(id)?'✓ 공구 리스트에 담았어요':'+ 공구 리스트에 담기'; };
+  $('#pdPick').onclick=()=>{ state.sel.has(id)?state.sel.delete(id):state.sel.add(id); renderGrid(); updateBar(); $('#pdPick').textContent=state.sel.has(id)?'✓ 신청할 품목으로 선택됨':'+ 이 품목 공구 신청하기'; };
   const mo=$('#dmore'); if(mo) mo.onclick=()=>{ $('#dw').classList.add('open'); mo.remove(); };
   $('#pdClose').onclick=closeModal; $('#pdX').onclick=closeModal;
   $('#modal').classList.add('open'); $('#modal').scrollTop=0; $('#sheet').scrollTop=0;
@@ -743,7 +744,7 @@ function openForm(){
 }
 function renderPicked(){
   const el=$('#pk'); if(!el) return;
-  el.innerHTML = picked().map(p=>`<span>${esc(p.name)} <button data-id="${p.id}" aria-label="빼기">×</button></span>`).join('') || '<span>담은 품목이 없어요</span>';
+  el.innerHTML = picked().map(p=>`<span>${esc(p.name)} <button data-id="${p.id}" aria-label="선택 해제">×</button></span>`).join('') || '<span>선택한 품목이 없어요</span>';
   el.onclick = e => { const b=e.target.closest('button'); if(!b) return; state.sel.delete(b.dataset.id); renderPicked(); renderGrid(); updateBar(); checkFol(); };
 }
 function save(){
