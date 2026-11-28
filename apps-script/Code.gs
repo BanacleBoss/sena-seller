@@ -13,6 +13,7 @@
  * 처음 한 번만 할 설정 (자세한 순서는 노션 '사용법 (직원용)' 페이지 참고)
  *  1) 프로젝트 설정 > 스크립트 속성에 NOTION_TOKEN 추가 (노션 내부 통합 시크릿)
  *     (선택) NOTIFY_EMAIL: 알림 받을 메일 주소. 여러 개면 쉼표로 구분
+ *     (선택) SLACK_WEBHOOK_URL: 슬랙 알림을 받을 Incoming Webhook 주소. 넣은 뒤 testSlack 실행으로 확인
  *  2) 편집기 위쪽 함수 목록에서 setup 선택 → 실행 → 권한 허용 (메일 발송·1시간마다 사진 새로고침 등록)
  *  3) 배포 > 배포 관리 > 연필 > 버전: 새 버전 > 배포  (주소는 그대로 유지됨)
  */
@@ -185,6 +186,28 @@ function notify_(p, name, items, channels, dup, notionUrl) {
     '노션에서 보기: ' + notionUrl
   ];
   MailApp.sendEmail({ to: to, subject: subject, body: lines.join('\n'), name: '세나컴퍼니 홈페이지' });
+  try { slack_(flag, name, items, p, dup, notionUrl); } catch (err) { console.error('슬랙 알림 실패', err); }
+}
+
+// 슬랙 알림 (스크립트 속성 SLACK_WEBHOOK_URL 이 있을 때만). 연락처·이메일은 슬랙에 보내지 않음
+function slack_(flag, name, items, p, dup, notionUrl) {
+  const url = PropertiesService.getScriptProperties().getProperty('SLACK_WEBHOOK_URL');
+  if (!url) return;
+  const icon = dup.status === '기존 벤더 셀러(제외)' ? ':warning:' : (dup.status === '확인 요청' ? ':mag:' : ':tada:');
+  const text = icon + ' *' + flag + '새 공구 신청* - ' + name + '\n'
+    + '• 품목: ' + items.join(', ') + '\n'
+    + '• 수수료 ' + (p.fee || '-') + '% · 팔로워 ' + (p.fol || '-') + ' · 희망 시기 ' + (p.when || '-') + '\n'
+    + '• 계정: ' + (p.link || '-') + '\n'
+    + '• 중복 확인: ' + dup.status + '\n'
+    + '<' + notionUrl + '|노션에서 보기>';
+  UrlFetchApp.fetch(url, { method: 'post', contentType: 'application/json', payload: JSON.stringify({ text: text }), muteHttpExceptions: true });
+}
+
+// 슬랙 연결 테스트: SLACK_WEBHOOK_URL 넣은 뒤 한 번 실행
+function testSlack() {
+  slack_('', '테스트(알림 확인용)', ['스윙키 보드'], { fee: '15', fol: '1000', when: '협의', link: '@test' },
+    { status: '신규 확인' }, 'https://senacompany.co.kr');
+  console.log('슬랙으로 테스트 메시지를 보냈어요. 안 오면 SLACK_WEBHOOK_URL 값을 확인하세요.');
 }
 
 /* ───────────── 홈페이지 품목 목록 ───────────── */
